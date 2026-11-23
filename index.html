@@ -59,6 +59,7 @@ input:focus,select:focus{outline:2px solid #f0c48a;border-color:var(--accent)}
 .food .p{font-size:10.5px;color:var(--muted);margin-top:2px}
 .food.off{opacity:.32;pointer-events:none;filter:grayscale(1)}
 .flag{font-size:9px;font-weight:700;color:#9a5a12;background:#fbe6cd;border-radius:6px;padding:1px 4px}
+.flag.edited{color:#2f7d62;background:#e3f3ec}
 .food .flag{position:absolute;top:3px;left:4px}
 .qadd{position:absolute;top:2px;right:3px;width:22px;height:22px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--accent2);font-size:15px;line-height:1;cursor:pointer;padding:0;font-weight:700}
 .qadd:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
@@ -100,6 +101,10 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--line)}
 .xdel{border:0;background:none;color:var(--warn);cursor:pointer;font-size:15px;padding:0 4px}
 .del{background:none;border:1px solid var(--line);color:var(--warn);border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap}
 .del:hover{background:#fbeceb;border-color:var(--warn)}
+.foodedit{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;text-align:left;border-bottom:1px dashed #b9b09f;transition:.12s}
+.foodedit:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.foodedit::after{content:" ✎";font-size:11px;color:var(--muted);opacity:.75}
+.foodedit:hover::after{color:var(--accent);opacity:1}
 .empty{color:var(--muted);font-size:13.5px;padding:14px;border:1px dashed var(--line);border-radius:10px;text-align:center}
 .pufabox{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fffdf9;margin-top:12px}
 .pufatrack{height:14px;background:#efe9dd;border-radius:8px;overflow:hidden;margin:8px 0 5px}
@@ -146,6 +151,8 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 .modal li{margin-bottom:5px}
 .modal .mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 .mstats{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-bottom:14px}
+.editgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.editbox{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fffdf9;font-size:12.5px;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -154,7 +161,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <header class="top">
 <svg width="34" height="34" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#f6d3ab"/><path d="M20 6a14 14 0 0 1 0 28z" fill="#d98324"/><circle cx="20" cy="20" r="4.5" fill="#fffdf9"/></svg>
 <div><h1>Peat-Style Daily Planner</h1>
-<div class="sub">Meal library · custom foods · drinks builder · editable portions · daily progress · save your day</div></div>
+<div class="sub">Meal library · custom foods · drinks builder · editable portions &amp; macros · daily progress · save your day</div></div>
 </header>
 
 <!-- ROW 1 -->
@@ -287,7 +294,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 
 <!-- ROW 7 -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 7</span><h2>Today's entries &amp; daily progress</h2><span class="hint">Use − / + or type to edit portions · eggs counted in whole eggs (50 g each)</span></div>
+<div class="rowhead"><span class="step">ROW 7</span><h2>Today's entries &amp; daily progress</h2><span class="hint">Use − / + or type to edit portions · click any food name to customize its protein or fat %</span></div>
 <div class="macro" style="margin-bottom:14px">
 <div class="mcard"><div class="k">Consumed / target</div><div class="v" id="totK">0</div><div class="s" id="totKs">kcal</div><div class="bar"><i id="barK" style="width:0%;background:var(--accent)"></i></div></div>
 <div class="mcard"><div class="k" style="color:var(--carb)">Carbs</div><div class="v" id="totC">0</div><div class="s" id="totCs">g</div><div class="bar"><i id="barC" style="width:0%;background:var(--carb)"></i></div></div>
@@ -317,6 +324,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 </footer>
 </div>
 
+<!-- CONFIRMATION MODAL -->
 <div class="mask" id="mask">
 <div class="modal">
 <h3 id="mTitle">Are you sure?</h3>
@@ -329,6 +337,31 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 </div>
 </div>
 </div>
+
+<!-- ROW 7 FOOD MACRO EDITOR MODAL -->
+<div class="mask" id="editMask">
+<div class="modal">
+<h3 id="eTitle">Modify Food Macros</h3>
+<div class="sub2" id="eSub">Adjust protein and fat percentage per 100 g for this entry item.</div>
+<div class="editgrid">
+<div>
+<label class="f" for="eProt">Protein (% / g per 100 g)</label>
+<input id="eProt" type="number" min="0" max="100" step="0.1">
+</div>
+<div>
+<label class="f" for="eFat">Fat (% / g per 100 g)</label>
+<input id="eFat" type="number" min="0" max="100" step="0.1">
+</div>
+</div>
+<div class="editbox" id="ePreview"></div>
+<div class="mact">
+<button class="btn ghost sm" id="eReset">Reset to default</button>
+<button class="btn ghost sm" id="eCancel">Cancel</button>
+<button class="btn green sm" id="eSave">Save changes</button>
+</div>
+</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -381,9 +414,14 @@ mushroom:'<path d="M8 22c0-8 6-13 14-13s14 5 14 13z" fill="#c9a882"/><path d="M8
 squash:'<path d="M22 14c9 0 14 6 14 13s-6 11-14 11-14-4-14-11 5-13 14-13z" fill="#e8963c"/><path d="M22 14v24M14 17c-2 6-2 14 0 20M30 17c2 6 2 14 0 20" stroke="#c9762a" stroke-width="1.5" fill="none"/><path d="M22 14v-5" stroke="#5b8c3a" stroke-width="3"/>',
 gelatin:'<path d="M10 18h24l-3 20H13z" fill="#f6d3ab"/><ellipse cx="22" cy="18" rx="12" ry="4" fill="#fbe6cd"/><path d="M14 26c4 3 12 3 16 0" stroke="#e8b98a" stroke-width="2" fill="none"/>',
 egg:'<ellipse cx="22" cy="25" rx="11" ry="14" fill="#fff" stroke="#ded6c6"/><circle cx="22" cy="26" r="6" fill="#f2b53c"/>',
+egg_med:'<ellipse cx="22" cy="26" rx="9.5" ry="12" fill="#fff" stroke="#ded6c6"/><circle cx="22" cy="27" r="5" fill="#f2b53c"/>',
+friedegg:'<path d="M9 27c-2-7 4-14 12-14s15 4 14 12c-1 6-6 11-14 11S11 33 9 27z" fill="#fffdf8" stroke="#e5c87b" stroke-width="1.8"/><circle cx="22" cy="25" r="6" fill="#f5b832"/><circle cx="20" cy="23" r="1.8" fill="#ffe08a"/>',
+friedegg_med:'<path d="M11 27c-2-6 3-12 10-12s13 4 12 10c-1 5-5 10-12 10S13 32 11 27z" fill="#fffdf8" stroke="#e5c87b" stroke-width="1.8"/><circle cx="22" cy="25" r="5" fill="#f5b832"/><circle cx="20" cy="23.5" r="1.5" fill="#ffe08a"/>',
 shrimp:'<path d="M32 14c-12-2-20 4-20 12s8 12 16 10c-8 4-20 0-20-10S20 10 32 14z" fill="#f08a6a"/><circle cx="30" cy="15" r="1.4" fill="#3a2a20"/><path d="M12 26l-5 3M13 31l-4 4" stroke="#e0705a" stroke-width="2"/>',
 oyster:'<path d="M8 26c4-10 24-14 28-6s-10 16-20 14-9-4-8-8z" fill="#cfc7b8"/><path d="M13 26c3-6 16-9 19-4s-7 10-13 9-7-3-6-5z" fill="#efe9dd"/>',
 beef:'<path d="M9 20c6-8 22-8 26 0s-2 16-13 16S3 28 9 20z" fill="#b4553f"/><path d="M14 22c4-4 12-4 15 1s-2 9-8 9-11-6-7-10z" fill="#c9705a"/><path d="M11 19c6-3 16-3 22 1" stroke="#f0dcc8" stroke-width="2" fill="none"/>',
+lamb:'<path d="M10 18c6-7 20-7 25 1s-2 16-12 16S4 26 10 18z" fill="#a24336"/><path d="M14 21c4-4 11-4 14 1s-2 8-7 8-10-5-7-9z" fill="#bf5e4e"/><path d="M12 16c6-2 15-2 20 2" stroke="#f6e7d4" stroke-width="2.5" fill="none"/><circle cx="15" cy="16" r="2.2" fill="#fffdf8"/>',
+lambshank:'<path d="M15 13c7-3 15 2 16 10s-4 13-11 13c-5 0-9-3-10-8-1-6 0-12 5-15z" fill="#9c3e30"/><path d="M18 16c5-2 10 1 11 7s-3 9-8 9" fill="#b85646"/><path d="M11 31l-5 6" stroke="#f3ead8" stroke-width="4.5" stroke-linecap="round"/><circle cx="5.5" cy="37.5" r="2.5" fill="#f3ead8"/>',
 mince:'<ellipse cx="22" cy="26" rx="14" ry="10" fill="#a94f3c"/><circle cx="16" cy="24" r="2.4" fill="#c06a54"/><circle cx="23" cy="28" r="2.6" fill="#c06a54"/><circle cx="28" cy="23" r="2.2" fill="#c06a54"/><circle cx="20" cy="20" r="2" fill="#c06a54"/>',
 chicken:'<path d="M10 26c2-9 10-14 18-13s10 7 8 13-8 11-15 11-12-4-11-11z" fill="#f0dcc0"/><path d="M14 25c2-6 8-9 13-8s7 5 6 9-6 8-11 8-9-3-8-9z" fill="#f8ecd8"/><path d="M12 30c6 3 16 3 22-1" stroke="#dcc4a2" stroke-width="1.6" fill="none"/>',
 liver:'<path d="M8 22c6-8 20-10 27-4s0 16-11 17S2 30 8 22z" fill="#8c3a2e"/><path d="M16 20c5-2 12-1 15 3" stroke="#a9503f" stroke-width="2.5" fill="none"/>',
@@ -392,11 +430,20 @@ coconut:'<circle cx="22" cy="24" r="14" fill="#8a6a4a"/><circle cx="22" cy="24" 
 oliveoil:'<path d="M18 12h8v6l4 6v14a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3V24l4-6z" fill="#dfe7c8" stroke="#b9c49a"/><path d="M15 27h14v11a2 2 0 0 1-2 2H17a2 2 0 0 1-2-2z" fill="#b7a53a"/><rect x="18" y="8" width="8" height="5" rx="1.5" fill="#8a7a3a"/><ellipse cx="33" cy="16" rx="4" ry="2.6" fill="#7d9a4a" transform="rotate(-25 33 16)"/>',
 coffee:'<path d="M11 16h20v12a10 10 0 0 1-20 0z" fill="#fff" stroke="#c9c2b4"/><path d="M13 19h16v9a8 8 0 0 1-16 0z" fill="#6b4426"/><path d="M31 19h4a4 4 0 0 1 0 8h-4" fill="none" stroke="#c9c2b4" stroke-width="2"/><path d="M18 10c2-2 0-4 0-4M24 10c2-2 0-4 0-4" stroke="#c9c2b4" stroke-width="1.6" fill="none"/>',
 cocoa:'<path d="M12 16h20v12a10 10 0 0 1-20 0z" fill="#fff" stroke="#c9c2b4"/><path d="M14 19h16v9a8 8 0 0 1-16 0z" fill="#7a4a2a"/><circle cx="19" cy="22" r="1.5" fill="#a9714a"/><circle cx="25" cy="25" r="1.5" fill="#a9714a"/>',
-whitefish:'<path d="M8 24c8-9 22-9 28 0-6 9-20 9-28 0z" fill="#dfe7ef"/><path d="M36 24l6-6v12z" fill="#c6d3de"/><circle cx="14" cy="22" r="1.5" fill="#3a2a20"/>'
+whitefish:'<path d="M8 24c8-9 22-9 28 0-6 9-20 9-28 0z" fill="#dfe7ef"/><path d="M36 24l6-6v12z" fill="#c6d3de"/><circle cx="14" cy="22" r="1.5" fill="#3a2a20"/>',
+otherfish:'<path d="M7 24c9-10 23-10 29 0-6 10-20 10-29 0z" fill="#b7cadb"/><path d="M36 24l6-6v12z" fill="#98b2c9"/><path d="M17 17c2 4 2 10 0 14" stroke="#8ca6be" stroke-width="1.5" fill="none"/><circle cx="13" cy="22" r="1.5" fill="#3a2a20"/>'
 };
 const svg=(k,s)=>'<svg width="'+s+'" height="'+s+'" viewBox="0 0 44 44">'+(ICON[k]||'')+'</svg>';
 
 /* ---------- food database, per 100 g ---------- */
+/* Note on fried eggs:
+   Large egg (60g) + 2.5g butter = 62.5g total per egg.
+   Per 62.5g: kcal = 93 + 17.925 = 110.925, c = 0.6625, p = 7.5825, f = 8.3875, pufa = 0.915
+   Per 100g:  kcal = 177.5, c = 1.06, p = 12.13, f = 13.42, pufa = 1.46
+   Medium egg (50g) + 2.5g butter = 52.5g total per egg.
+   Per 52.5g: kcal = 77.5 + 17.925 = 95.425, c = 0.5525, p = 6.3225, f = 7.3275, pufa = 0.775
+   Per 100g:  kcal = 181.8, c = 1.05, p = 12.04, f = 13.96, pufa = 1.48
+*/
 const FOODS=[
 {id:'oj',n:'Orange juice',cat:'drink',ic:'juice',kcal:45,c:10.4,p:0.7,f:0.2,pufa:0.04,std:250,step:25,ex:[]},
 {id:'pomj',n:'Pomegranate juice',cat:'drink',ic:'pom',kcal:54,c:13.1,p:0.2,f:0.3,pufa:0.05,std:200,step:25,ex:[]},
@@ -446,14 +493,21 @@ const FOODS=[
 {id:'feta',n:'White cheese / feta',cat:'prot',ic:'feta',kcal:264,c:4.1,p:14.2,f:21.3,pufa:0.60,std:40,step:10,ex:['dairy']},
 {id:'yogurt',n:'Plain yogurt',cat:'prot',ic:'yogurt',kcal:61,c:4.7,p:3.5,f:3.3,pufa:0.10,std:200,step:25,ex:['dairy']},
 {id:'gelatin',n:'Gelatin / collagen',cat:'prot',ic:'gelatin',kcal:335,c:0.0,p:85.0,f:0.0,pufa:0.00,std:15,step:5,ex:[]},
-{id:'egg',n:'Boiled egg',cat:'prot',ic:'egg',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:100,step:1,unit:'egg',eggG:50,ex:['egg']},
+{id:'egg',n:'Boiled egg (Medium)',cat:'prot',ic:'egg_med',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:100,step:1,unit:'egg',eggG:50,hidden:true,ex:['egg']},
+{id:'egglarge',n:'Boiled egg (Large)',cat:'prot',ic:'egg',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:120,step:1,unit:'egg',eggG:60,ex:['egg']},
+{id:'eggmedium',n:'Boiled egg (Medium)',cat:'prot',ic:'egg_med',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:100,step:1,unit:'egg',eggG:50,ex:['egg']},
+{id:'friedegglarge',n:'Fried egg (Large, +2.5g butter)',cat:'prot',ic:'friedegg',kcal:177.5,c:1.06,p:12.13,f:13.42,pufa:1.46,std:125,step:1,unit:'egg',eggG:62.5,butterPerEgg:2.5,ex:['egg','dairy']},
+{id:'friedeggmedium',n:'Fried egg (Medium, +2.5g butter)',cat:'prot',ic:'friedegg_med',kcal:181.8,c:1.05,p:12.04,f:13.96,pufa:1.48,std:105,step:1,unit:'egg',eggG:52.5,butterPerEgg:2.5,ex:['egg','dairy']},
 {id:'shrimp',n:'Shrimp',cat:'prot',ic:'shrimp',kcal:99,c:0.2,p:24.0,f:0.3,pufa:0.10,std:150,step:25,ex:['shellfish']},
 {id:'oyster',n:'Oysters',cat:'prot',ic:'oyster',kcal:81,c:4.9,p:9.0,f:2.3,pufa:0.20,std:120,step:20,ex:['shellfish']},
 {id:'beef',n:'Lean beef / diced',cat:'prot',ic:'beef',kcal:170,c:0.0,p:26.0,f:7.0,pufa:0.30,std:150,step:25,ex:['beef']},
 {id:'mince',n:'Beef mince',cat:'prot',ic:'mince',kcal:215,c:0.0,p:24.0,f:13.0,pufa:0.50,std:150,step:25,ex:['beef']},
+{id:'lambshank',n:'Lamb shank',cat:'prot',ic:'lambshank',kcal:180,c:0.0,p:20.0,f:11.0,pufa:0.80,std:180,step:25,ex:['beef']},
+{id:'lamb',n:'Lamb meat',cat:'prot',ic:'lamb',kcal:244,c:0.0,p:25.0,f:16.0,pufa:1.10,std:150,step:25,ex:['beef']},
 {id:'chicken',n:'Chicken breast (skinless)',cat:'prot',ic:'chicken',kcal:160,c:0.0,p:31.0,f:3.6,pufa:0.70,std:150,step:25,mod:true,ex:[]},
 {id:'liver',n:'Beef liver (weekly)',cat:'prot',ic:'liver',kcal:135,c:3.9,p:20.4,f:3.6,pufa:0.50,std:100,step:25,ex:['beef']},
 {id:'cod',n:'Cod (lean white fish)',cat:'prot',ic:'whitefish',kcal:82,c:0.0,p:18.0,f:0.7,pufa:0.20,std:150,step:25,ex:['fish']},
+{id:'otherfish',n:'Other fish (5% fat)',cat:'prot',ic:'otherfish',kcal:125,c:0.0,p:20.0,f:5.0,pufa:1.00,std:150,step:25,mod:true,ex:['fish']},
 {id:'butter',n:'Butter / ghee',cat:'other',ic:'butter',kcal:717,c:0.1,p:0.9,f:81.1,pufa:3.00,std:10,step:5,ex:['dairy']},
 {id:'coconut',n:'Coconut oil',cat:'other',ic:'coconut',kcal:892,c:0.0,p:0.0,f:99.1,pufa:1.70,std:10,step:5,ex:[]},
 {id:'oliveoil',n:'Olive oil (extra virgin)',cat:'other',ic:'oliveoil',kcal:884,c:0.0,p:0.0,f:100.0,pufa:10.5,std:10,step:5,mod:true,ex:[]}
@@ -461,7 +515,7 @@ const FOODS=[
 const FMAP={};FOODS.forEach(f=>FMAP[f.id]=f);
 const CATS=[
 {k:'carb',t:'Carbohydrates',cap:'Fruit, honey, starch, breads, vegetables — the metabolic base.'},
-{k:'prot',t:'Proteins',cap:'Dairy, gelatin, shellfish, lean ruminant, eggs, poultry. Balance muscle meats with gelatin.'},
+{k:'prot',t:'Proteins',cap:'Dairy, gelatin, shellfish, lean ruminant, eggs, poultry, fish. Balance muscle meats with gelatin.'},
 {k:'other',t:'Other optional essentials',cap:'Cooking fats — saturated first; olive oil is mostly MUFA but carries PUFA.'}
 ];
 const SWEET=new Set(['honey','sugar']);
@@ -476,25 +530,25 @@ coconut:{el:'amtCoco',on:'onCoco',food:'coconut',def:5,min:0,max:15,step:1}};
 /* ---------- MEAL LIBRARY (from the uploaded plan, PUFA-reduced) ---------- */
 const MEALS=[
 {slot:'Breakfast',id:'b1',n:'Egg & cheese plate',pdf:500,
- it:[['egg',50],['feta',40],['cheese',30],['sourdough',80],['oj',250],['honey',10]],
+ it:[['eggmedium',50],['feta',40],['cheese',30],['sourdough',80],['oj',250],['honey',10]],
  m:'Boil the egg. Serve with both cheeses, bread and honey; drink the juice alongside.'},
 {slot:'Breakfast',id:'b2',n:'Tomato omelette',pdf:565,
- it:[['egg',50],['tomato',150],['butter',5],['cheese',30],['sourdough',80],['oj',200]],
+ it:[['eggmedium',50],['tomato',150],['butter',5],['cheese',30],['sourdough',80],['oj',200]],
  m:'Soften the tomato in butter, add beaten egg, cook through. Serve with bread and juice.'},
 {slot:'Breakfast',id:'b3',n:'Apple milk rice porridge',pdf:445,
  it:[['rice_dry',45],['milk',250],['apple',150],['honey',10]],
  m:'Simmer rice in milk until soft. Stir in grated apple, then honey off the heat. (Oats swapped for rice to cut PUFA.)'},
 {slot:'Breakfast',id:'b4',n:'Cheese omelette',pdf:390,
- it:[['egg',50],['cheese',30],['butter',5],['tomato',150],['sourdough',60],['oj',200]],
+ it:[['eggmedium',50],['cheese',30],['butter',5],['tomato',150],['sourdough',60],['oj',200]],
  m:'Beat egg with cheese, cook in butter, finish with tomato. Bread and juice alongside.'},
 {slot:'Breakfast',id:'b5',n:'Boiled egg plate',pdf:440,
- it:[['egg',50],['cheese',40],['orange',180],['tomato',150],['cucumber',150],['sourdough',60],['honey',10]],
+ it:[['eggmedium',50],['cheese',40],['orange',180],['tomato',150],['cucumber',150],['sourdough',60],['honey',10]],
  m:'Boil the egg. Serve with cheese, peeled orange, sliced vegetables and bread.'},
 {slot:'Breakfast',id:'b6',n:'Honey French toast',pdf:395,
- it:[['egg',50],['milk',100],['sourdough',80],['butter',5],['honey',10]],
+ it:[['eggmedium',50],['milk',100],['sourdough',80],['butter',5],['honey',10]],
  m:'Dip bread in the egg-milk mix, fry both sides in butter, drizzle honey.'},
 {slot:'Breakfast',id:'b7',n:'Cheese menemen',pdf:465,
- it:[['egg',50],['tomato',200],['feta',40],['butter',5],['sourdough',80],['oj',200]],
+ it:[['eggmedium',50],['tomato',200],['feta',40],['butter',5],['sourdough',80],['oj',200]],
  m:'Soften tomato in butter, add egg and white cheese, cook. Serve with bread.'},
 {slot:'Lunch',id:'l1',n:'Yogurt potato & carrot',pdf:405,
  it:[['potato',250],['yogurt',200],['carrot',100],['coconut',5]],
@@ -503,7 +557,7 @@ const MEALS=[
  it:[['rice_dry',60],['feta',60],['cucumber',150],['carrot',100],['coconut',5]],
  m:'Cook the rice. Add cheese and chopped vegetables, drizzle coconut oil.'},
 {slot:'Lunch',id:'l3',n:'Potato egg salad',pdf:415,
- it:[['egg',50],['potato',250],['yogurt',150],['cucumber',150],['honey',10]],
+ it:[['eggmedium',50],['potato',250],['yogurt',150],['cucumber',150],['honey',10]],
  m:'Boil potato and egg, chop, mix with yogurt and cucumber.'},
 {slot:'Lunch',id:'l4',n:'Milk & juice',pdf:525,
  it:[['milk',500],['oj',500]],
@@ -572,14 +626,26 @@ const round=(x,d=0)=>Math.round(x*Math.pow(10,d))/Math.pow(10,d);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const rnd=a=>a.length?a[Math.floor(Math.random()*a.length)]:null;
 const r5=x=>Math.max(5,Math.round(x/5)*5);
-const gramsOf=it=>it.f.unit==='egg'?it.n*(it.f.eggG||50):it.g;
-const nut=(it,k)=>it.f[k]*gramsOf(it)/100;
+const gramsOf=it=>it.f.unit==='egg'?round(it.n*(it.f.eggG||50),1):it.g;
+
+/* Per-item macro value per 100g, accounting for Row 7 user overrides */
+function itemRate(it,k){
+if(it.ov&&typeof it.ov[k]==='number')return it.ov[k];
+return it.f[k];}
+function computeKcal100(c100,p100,f100,baseF){
+const baseSum=baseF.c*4+baseF.p*4+baseF.f*9;
+const newSum=c100*4+p100*4+f100*9;
+if(baseSum>0&&baseF.kcal>0)return round(baseF.kcal*(newSum/baseSum),1);
+return round(newSum,1);}
+const nut=(it,k)=>itemRate(it,k)*gramsOf(it)/100;
+
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200);}
 function totalsOf(list){return list.reduce((a,it)=>({kcal:a.kcal+nut(it,'kcal'),c:a.c+nut(it,'c'),p:a.p+nut(it,'p'),f:a.f+nut(it,'f'),pufa:a.pufa+nut(it,'pufa')}),{kcal:0,c:0,p:0,f:0,pufa:0});}
 function usedTotals(){return S.recipes.reduce((a,r)=>({kcal:a.kcal+r.tot.kcal,c:a.c+r.tot.c,p:a.p+r.tot.p,f:a.f+r.tot.f,pufa:a.pufa+r.tot.pufa}),{kcal:0,c:0,p:0,f:0,pufa:0});}
-function makeItem(f,g){
-if(f.unit==='egg')return {f:f,n:Math.max(1,Math.round((g||f.std)/(f.eggG||50)))};
-return {f:f,g:g||f.std};}
+function makeItem(f,g,ov){
+const it=f.unit==='egg'?{f:f,n:Math.max(1,Math.round((g||f.std)/(f.eggG||50)))}:{f:f,g:g||f.std};
+if(ov)it.ov=Object.assign({},ov);
+return it;}
 function slotNow(){const h=new Date().getHours();
 if(h>=5&&h<11)return 'Breakfast';if(h>=11&&h<15)return 'Lunch';if(h>=15&&h<18)return 'Snack';return 'Dinner';}
 function slotName(base){const n=S.recipes.filter(r=>r.slot===base).length+1;return n===1?base:base+' '+n;}
@@ -596,7 +662,70 @@ function closeModal(){$('mask').classList.remove('show');pending=null;}
 $('mCancel').onclick=closeModal;
 $('mask').addEventListener('click',e=>{if(e.target===$('mask'))closeModal();});
 $('mOk').onclick=()=>{const fn=pending;closeModal();if(fn)fn();};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('mask').classList.contains('show'))closeModal();});
+
+/* ---------- Row 7 Food Macro Editor Modal ---------- */
+let editCtx=null;
+function openMacroEditor(rId,idx){
+const r=S.recipes.find(x=>x.id===rId);if(!r)return;
+const it=r.items[idx];if(!it)return;
+editCtx={rId,idx};
+$('eTitle').textContent='Modify Macros: '+it.f.n;
+$('eSub').textContent='Adjust protein and fat percentage (g per 100 g) for this entry item ('+gramsOf(it)+' g portion).';
+$('eProt').value=round(itemRate(it,'p'),1);
+$('eFat').value=round(itemRate(it,'f'),1);
+updateMacroPreview();
+$('editMask').classList.add('show');
+$('eProt').focus();}
+function closeMacroEditor(){$('editMask').classList.remove('show');editCtx=null;}
+function updateMacroPreview(){
+if(!editCtx)return;
+const r=S.recipes.find(x=>x.id===editCtx.rId);if(!r)return;
+const it=r.items[editCtx.idx];if(!it)return;
+const p=Math.max(0,Math.min(100,parseFloat($('eProt').value)||0));
+const f=Math.max(0,Math.min(100,parseFloat($('eFat').value)||0));
+const c=it.f.c;
+const kcal100=computeKcal100(c,p,f,it.f);
+const g=gramsOf(it);
+const totK=round(kcal100*g/100);
+const totP=round(p*g/100,1);
+const totF=round(f*g/100,1);
+const totC=round(c*g/100,1);
+$('ePreview').innerHTML=
+'<strong>Per 100 g:</strong> '+kcal100+' kcal · Carbs '+round(c,1)+'% · Protein <strong>'+round(p,1)+'%</strong> · Fat <strong>'+round(f,1)+'%</strong><br>'+
+'<strong>This portion ('+g+' g):</strong> '+totK+' kcal · C '+totC+' g · P '+totP+' g · F '+totF+' g'+
+'<div class="hint" style="margin-top:4px">Default '+it.f.n+': Protein '+it.f.p+'%, Fat '+it.f.f+'% ('+it.f.kcal+' kcal/100g)</div>';}
+$('eProt').addEventListener('input',updateMacroPreview);
+$('eFat').addEventListener('input',updateMacroPreview);
+$('eCancel').onclick=closeMacroEditor;
+$('editMask').addEventListener('click',e=>{if(e.target===$('editMask'))closeMacroEditor();});
+$('eReset').onclick=()=>{
+if(!editCtx)return;
+const r=S.recipes.find(x=>x.id===editCtx.rId);if(!r)return;
+const it=r.items[editCtx.idx];if(!it)return;
+delete it.ov;
+recalc(r);renderRecipes();update();closeMacroEditor();
+toast(it.f.n+' reset to default macros.');};
+$('eSave').onclick=()=>{
+if(!editCtx)return;
+const r=S.recipes.find(x=>x.id===editCtx.rId);if(!r)return;
+const it=r.items[editCtx.idx];if(!it)return;
+const p=round(Math.max(0,Math.min(100,parseFloat($('eProt').value)||0)),1);
+const f=round(Math.max(0,Math.min(100,parseFloat($('eFat').value)||0)),1);
+if(p===round(it.f.p,1)&&f===round(it.f.f,1)){
+delete it.ov;
+}else{
+const kcal100=computeKcal100(it.f.c,p,f,it.f);
+it.ov={p:p,f:f,kcal:kcal100};
+}
+recalc(r);renderRecipes();update();closeMacroEditor();
+toast('Updated '+it.f.n+' ('+p+'% protein, '+f+'% fat).');};
+
+document.addEventListener('keydown',e=>{
+if(e.key==='Escape'){
+if($('mask').classList.contains('show'))closeModal();
+if($('editMask').classList.contains('show'))closeMacroEditor();
+}});
+
 function assessEntry(items){
 const T=S.targets,u=usedTotals(),t=totalsOf(items),w=[];
 if(!items.some(i=>i.f.cat==='prot'||nut(i,'p')>=8))w.push('No meaningful protein in this entry — Peat pairs carbohydrate with protein at every meal.');
@@ -673,11 +802,12 @@ const off=blocked(f),on=S.sel.has(f.id)?' on':'';
 const portion=f.unit==='egg'?(f.std/(f.eggG||50))+' eggs':f.std+' g';
 const flag=f.mod?'<span class="flag" title="Moderate PUFA / Peat-cautionary">MOD</span>':'';
 const plus=off?'':'<button class="qadd" data-add="'+f.id+'" title="Add '+f.n+' on its own">+</button>';
-return '<div class="food'+on+(off?' off':'')+'" data-id="'+f.id+'" title="'+f.n+' — per 100 g: '+f.kcal+' kcal, C '+f.c+' P '+f.p+' F '+f.f+', PUFA '+f.pufa+' g">'+flag+plus+svg(f.ic,44)+'<div class="n">'+f.n+'</div><div class="p">'+portion+' · PUFA '+round(f.pufa*f.std/100,2)+' g</div></div>';}
+const extra=f.butterPerEgg?(' · '+f.butterPerEgg+'g butter/egg'):'';
+return '<div class="food'+on+(off?' off':'')+'" data-id="'+f.id+'" title="'+f.n+' — per 100 g: '+round(f.kcal,1)+' kcal, C '+round(f.c,1)+' P '+round(f.p,1)+' F '+round(f.f,1)+', PUFA '+round(f.pufa,2)+' g'+extra+'">'+flag+plus+svg(f.ic,44)+'<div class="n">'+f.n+'</div><div class="p">'+portion+' · PUFA '+round(f.pufa*f.std/100,2)+' g</div></div>';}
 function renderLibrary(){
 $('library').innerHTML=CATS.map(c=>
 '<div class="cat"><h3>'+c.t+'</h3><div class="cap">'+c.cap+'</div><div class="foods">'+
-FOODS.filter(f=>f.cat===c.k).map(foodCard).join('')+'</div></div>').join('');
+FOODS.filter(f=>f.cat===c.k&&!f.hidden).map(foodCard).join('')+'</div></div>').join('');
 refreshSelCount();}
 function refreshSelCount(){
 $('selcount').textContent=S.sel.size+' item'+(S.sel.size===1?'':'s')+' selected';
@@ -697,7 +827,7 @@ if(w.length)askConfirm('Add '+f.n+' on its own?','You can add anything — these
 else commit();}
 $('clearSel').onclick=()=>{S.sel.clear();renderLibrary();renderDrinks();update();};
 $('auto').onclick=()=>{
-const pref=['oj','milk','potato','rice','carrotsalad','mango','honey','cottage','egg','shrimp','gelatin','butter','coconut'];
+const pref=['oj','milk','potato','rice','carrotsalad','mango','honey','cottage','egglarge','shrimp','gelatin','butter','coconut'];
 S.sel.clear();
 pref.forEach(id=>{const f=FMAP[id];if(f&&!f.mod&&!blocked(f))S.sel.add(id);});
 renderLibrary();renderDrinks();update();};
@@ -789,7 +919,7 @@ return bn;}
 function dishName(list){
 const c1=list.find(i=>i.f.cat==='carb'&&!SMALL.has(i.f.id)),p1=list.find(i=>i.f.cat==='prot'&&i.f.id!=='gelatin');
 const adj={orange:'Orchard',mango:'Sunripe',kiwi:'Emerald',apple:'Orchard',pear:'Poached Pear',banana:'Golden',melon:'Cool',grapes:'Vine',berries:'Ruby',potato:'Hearth',rice:'Paddy',rice_dry:'Paddy',sourdough:'Sourdough',yufka:'Flatbread',carrot:'Root',carrotsalad:'Shredded Carrot',mushroom:'Woodland',squash:'Amber',icecream:'Frozen'};
-const dish={cottage:'Cottage Bowl',cheese:'Cheese Plate',feta:'White Cheese Plate',yogurt:'Yogurt Bowl',gelatin:'Gelatin Cream',egg:'Egg Plate',shrimp:'Shrimp Skillet',oyster:'Oyster Plate',beef:'Beef Plate',mince:'Meatball Plate',chicken:'Chicken Plate',liver:'Liver & Onion',cod:'Cod Plate'};
+const dish={cottage:'Cottage Bowl',cheese:'Cheese Plate',feta:'White Cheese Plate',yogurt:'Yogurt Bowl',gelatin:'Gelatin Cream',egg:'Egg Plate',egglarge:'Egg Plate',eggmedium:'Egg Plate',friedegglarge:'Fried Egg Plate',friedeggmedium:'Fried Egg Plate',shrimp:'Shrimp Skillet',oyster:'Oyster Plate',beef:'Beef Plate',mince:'Meatball Plate',lambshank:'Lamb Shank Plate',lamb:'Lamb Plate',chicken:'Chicken Plate',liver:'Liver & Onion',cod:'Cod Plate',otherfish:'Fish Plate'};
 return (adj[c1?c1.f.id:'']||'Simple')+' '+(dish[p1?p1.f.id:'']||'Plate');}
 function pushRecipe(list,kind,name,slot){
 const nm=name||(kind==='drink'?drinkName(list):dishName(list));
@@ -846,7 +976,7 @@ const cap=Math.max(1,Math.floor(hi/(p1.eggG||50)));
 items.set(p1.id,{f:p1,n:Math.max(1,Math.min(cap,want))});
 }else put(p1,tP/(p1.p/100),p1.std*0.3,hi);}
 if(S.sel.has('gelatin')&&!items.has('gelatin')){
-const muscle=p1&&['chicken','beef','mince','cod','shrimp'].includes(p1.id);
+const muscle=p1&&['chicken','beef','mince','lambshank','lamb','cod','otherfish','shrimp'].includes(p1.id);
 if(muscle||Math.random()<0.5){const left=rem.p-sum('p');
 if(left>4)put(FMAP.gelatin,Math.min(15,left*0.2/0.85),5,15);}}
 if(others.length&&sum('f')<tF*0.85&&sum('kcal')<budget*0.85){
@@ -906,12 +1036,22 @@ if(has('carrotsalad'))steps.push('Shred enough raw carrot for '+g('carrotsalad')
 if(has('mushroom'))steps.push('Slice '+g('mushroom')+' g mushrooms and cook thoroughly in butter or coconut oil.');
 if(has('beef'))steps.push('Brown '+g('beef')+' g diced beef, add water and simmer until tender.');
 if(has('mince'))steps.push('Cook '+g('mince')+' g mince in butter — as a sauce or shaped into meatballs.');
+if(has('lambshank'))steps.push('Braise '+g('lambshank')+' g lamb shank slowly in salted water or broth until fall-off-the-bone tender (rich in natural gelatin).');
+if(has('lamb'))steps.push('Sear or slow-cook '+g('lamb')+' g lamb meat; pair with gelatin or broth to balance amino acids.');
 if(has('chicken'))steps.push('Poach or gently sear '+g('chicken')+' g chicken breast; pair with gelatin to balance the amino acids.');
 if(has('liver'))steps.push('Slice '+g('liver')+' g liver thin and sear briefly (once weekly at most).');
 if(has('shrimp'))steps.push('Poach or quick-sear '+g('shrimp')+' g shrimp for 2–3 minutes.');
 if(has('oyster'))steps.push('Warm '+g('oyster')+' g oysters gently in their liquor.');
 if(has('cod'))steps.push('Bake or steam '+g('cod')+' g cod until just opaque.');
-if(has('egg')){const it=items.find(i=>i.f.id==='egg');steps.push('Cook '+it.n+' egg'+(it.n>1?'s':'')+' ('+g('egg')+' g) — boiled, or beaten into an omelette.');}
+if(has('otherfish'))steps.push('Bake, poach or pan-cook '+g('otherfish')+' g fish (5% fat) gently until flaky.');
+items.filter(i=>i.f.unit==='egg').forEach(it=>{
+if(it.f.butterPerEgg){
+const bTot=round(it.n*it.f.butterPerEgg,1);
+const rawG=round(it.n*(it.f.eggG-it.f.butterPerEgg),1);
+steps.push('Fry '+it.n+' egg'+(it.n>1?'s':'')+' ('+rawG+' g egg) gently in '+bTot+' g butter ('+it.f.butterPerEgg+' g butter per egg; '+gramsOf(it)+' g total).');
+}else{
+steps.push('Cook '+it.n+' egg'+(it.n>1?'s':'')+' ('+gramsOf(it)+' g) — boiled, or beaten into an omelette.');
+}});
 if(has('onion'))steps.push('Soften '+g('onion')+' g onion in the fat before adding other ingredients.');
 if(has('tomato'))steps.push('Add '+g('tomato')+' g tomato and cook down.');
 if(has('carrot'))steps.push('Simmer '+g('carrot')+' g carrot until soft.');
@@ -944,9 +1084,22 @@ box.innerHTML=S.recipes.map((r,i)=>{
 const rows=r.items.map((it,j)=>{
 const isEgg=it.f.unit==='egg',val=isEgg?it.n:it.g,st=isEgg?1:(it.f.step||5);
 const unit=isEgg?(it.n>1?'eggs':'egg'):'g';
-const sub=isEgg?'<div class="hint" style="font-size:11px">'+gramsOf(it)+' g</div>':'';
+let subParts=[];
+if(isEgg){
+if(it.f.butterPerEgg){
+const bTot=round(it.n*it.f.butterPerEgg,1);
+subParts.push(gramsOf(it)+' g total (incl. '+bTot+' g butter)');
+}else{
+subParts.push(gramsOf(it)+' g');
+}
+}
+if(it.ov){
+subParts.push('Custom: '+round(itemRate(it,'p'),1)+'% P, '+round(itemRate(it,'f'),1)+'% F');
+}
+const sub=subParts.length?'<div class="hint" style="font-size:11px">'+subParts.join(' · ')+'</div>':'';
 const mod=it.f.mod?' <span class="flag">MOD</span>':'';
-return '<tr><td>'+it.f.n+mod+sub+'</td>'+
+const edFlag=it.ov?' <span class="flag edited" title="Protein/Fat % customized">EDITED</span>':'';
+return '<tr><td><button type="button" class="foodedit" data-act="edit" data-r="'+r.id+'" data-i="'+j+'" title="Click to modify protein or fat %">'+it.f.n+'</button>'+mod+edFlag+sub+'</td>'+
 '<td><div class="qty"><button class="qbtn" data-act="dec" data-r="'+r.id+'" data-i="'+j+'">−</button>'+
 '<input type="number" min="0" step="'+st+'" value="'+val+'" data-act="set" data-r="'+r.id+'" data-i="'+j+'">'+
 '<button class="qbtn" data-act="inc" data-r="'+r.id+'" data-i="'+j+'">+</button><span class="unit">'+unit+'</span></div></td>'+
@@ -958,16 +1111,17 @@ return '<div class="recipe'+cls+'"><div class="rhead"><div><p class="rname">'+(i
 '<div class="ring">'+round(t.kcal)+' kcal · PUFA '+round(t.pufa,2)+' g · '+label+'</div></div>'+
 '<button class="del" data-del="'+r.id+'">Delete</button></div>'+
 '<table><thead><tr><th>Food</th><th>Portion</th><th>kcal</th><th>Carb g</th><th>Prot g</th><th>Fat g</th><th>PUFA g</th><th></th></tr></thead>'+
-'<tbody>'+rows+'</tbody><tfoot><tr><td>Total</td><td>'+round(r.items.reduce((a,x)=>a+gramsOf(x),0))+' g</td><td>'+round(t.kcal)+'</td><td>'+round(t.c,1)+'</td><td>'+round(t.p,1)+'</td><td>'+round(t.f,1)+'</td><td>'+round(t.pufa,2)+'</td><td></td></tr></tfoot></table>'+
+'<tbody>'+rows+'</tbody><tfoot><tr><td>Total</td><td>'+round(r.items.reduce((a,x)=>a+gramsOf(x),0),1)+' g</td><td>'+round(t.kcal)+'</td><td>'+round(t.c,1)+'</td><td>'+round(t.p,1)+'</td><td>'+round(t.f,1)+'</td><td>'+round(t.pufa,2)+'</td><td></td></tr></tfoot></table>'+
 '<details style="margin-top:8px"><summary>Preparation</summary><ol style="font-size:13px;margin:8px 0 0;padding-left:20px">'+r.method.map(s=>'<li>'+s+'</li>').join('')+'</ol></details></div>';}).join('');}
 function recalc(r){r.tot=totalsOf(r.items);r.method=buildMethod(r.items,r.kind==='drink');}
 $('recipes').addEventListener('click',e=>{
 const del=e.target.closest('[data-del]');
 if(del){S.recipes=S.recipes.filter(r=>r.id!==del.dataset.del);renderRecipes();update();return;}
 const b=e.target.closest('[data-act]');if(!b||b.tagName==='INPUT')return;
+const act=b.dataset.act;
+if(act==='edit'){openMacroEditor(b.dataset.r,+b.dataset.i);return;}
 const r=S.recipes.find(x=>x.id===b.dataset.r);if(!r)return;
 const it=r.items[+b.dataset.i];if(!it)return;
-const act=b.dataset.act;
 if(act==='rm')r.items.splice(+b.dataset.i,1);
 else{const st=it.f.unit==='egg'?1:(it.f.step||5),d=act==='inc'?st:-st;
 if(it.f.unit==='egg')it.n=Math.max(0,it.n+d);else it.g=Math.max(0,round(it.g+d,1));}
@@ -995,7 +1149,10 @@ function snapshot(name){
 return {v:6,name:name||'Untitled plan',savedAt:new Date().toISOString(),
 profile:{age:S.age,gender:S.gender,height:S.height,weight:S.weight,act:S.act,goal:S.goal,excl:[...S.excl]},
 sm:S.sm,sel:[...S.sel],
-recipes:S.recipes.map(r=>({id:r.id,name:r.name,kind:r.kind,slot:r.slot,items:r.items.map(it=>({id:it.f.id,g:it.g,n:it.n}))}))};}
+recipes:S.recipes.map(r=>({id:r.id,name:r.name,kind:r.kind,slot:r.slot,items:r.items.map(it=>{
+const obj={id:it.f.id,g:it.g,n:it.n};
+if(it.ov)obj.ov=Object.assign({},it.ov);
+return obj;})}))};}
 function restore(p){
 if(!p||!p.profile)return false;
 S.age=p.profile.age;S.gender=p.profile.gender||'';S.height=p.profile.height;S.weight=p.profile.weight;
@@ -1007,7 +1164,9 @@ S.sm.on=Object.assign({fruit:true,cocoa:true,honey:true,gelatin:false,coconut:fa
 S.sm.amt=Object.assign({fruit:100,cocoa:5,honey:15,gelatin:10,coconut:5},p.sm.amt||{});}
 S.recipes=(p.recipes||[]).map(r=>{
 const items=(r.items||[]).map(x=>{const f=FMAP[x.id];if(!f)return null;
-return f.unit==='egg'?{f:f,n:x.n||1}:{f:f,g:x.g||f.std};}).filter(Boolean);
+const it=f.unit==='egg'?{f:f,n:x.n||1}:{f:f,g:x.g||f.std};
+if(x.ov)it.ov=Object.assign({},x.ov);
+return it;}).filter(Boolean);
 if(!items.length)return null;
 const kind=r.kind||'meal';
 return {id:r.id||uid(),name:r.name||'Entry',kind:kind,slot:r.slot||null,items:items,tot:totalsOf(items),method:buildMethod(items,kind==='drink')};}).filter(Boolean);
@@ -1021,7 +1180,10 @@ function renderSaved(){
 const plans=readPlans();
 $('savedList').innerHTML=plans.length?plans.map(p=>{
 const kc=(p.recipes||[]).reduce((a,r)=>a+(r.items||[]).reduce((s,x)=>{const f=FMAP[x.id];
-return s+(f?f.kcal*((f.unit==='egg'?(x.n||1)*(f.eggG||50):(x.g||0))/100):0);},0),0);
+if(!f)return s;
+const kRate=(x.ov&&typeof x.ov.kcal==='number')?x.ov.kcal:f.kcal;
+const gVal=f.unit==='egg'?(x.n||1)*(f.eggG||50):(x.g||0);
+return s+kRate*(gVal/100);},0),0);
 return '<div class="saveditem"><div><strong>'+p.name+'</strong><div class="meta">'+
 new Date(p.savedAt).toLocaleString()+' · '+(p.recipes||[]).length+' entries · '+round(kc)+' kcal</div></div>'+
 '<div style="display:flex;gap:6px"><button class="btn ghost sm" data-load="'+p.savedAt+'">Load</button>'+
