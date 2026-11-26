@@ -128,8 +128,8 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 .dchip .n{font-size:11.5px;font-weight:600;line-height:1.2}
 .dchip .p{font-size:10.5px;color:var(--muted)}
 .dchip.off{opacity:.32;pointer-events:none;filter:grayscale(1)}
-.addins{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
-@media(max-width:980px){.addins{grid-template-columns:repeat(3,1fr)}}
+.addins{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:12px}
+@media(max-width:1100px){.addins{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.addins{grid-template-columns:repeat(2,1fr)}}
 .ai{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff}
 .ai.dim{opacity:.5}
@@ -153,6 +153,13 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 .mstats{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-bottom:14px}
 .editgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
 .editbox{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fffdf9;font-size:12.5px;margin-bottom:12px}
+.slotdet summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:14.5px;font-weight:700;color:var(--ink)}
+.slotdet summary::-webkit-details-marker{display:none}
+.slotdet summary::after{content:"▸";font-size:13px;color:var(--muted);transition:transform .15s}
+.slotdet[open] summary::after{transform:rotate(90deg)}
+.slotdet .cap{margin-top:3px}
+.slotdet[open] .cap{margin-bottom:10px}
+.slotdet:not([open]) .cap{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -276,6 +283,10 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <div class="ai" data-ai="honey">
 <label><input type="checkbox" id="onHoney" checked> Honey</label>
 <div class="qty"><button class="qbtn" data-ai-dec="honey">−</button><input type="number" id="amtHoney" value="15" min="0" max="40" step="5"><button class="qbtn" data-ai-inc="honey">+</button><span class="unit">g</span></div>
+</div>
+<div class="ai" data-ai="sugar">
+<label><input type="checkbox" id="onSugar"> Sugar</label>
+<div class="qty"><button class="qbtn" data-ai-dec="sugar">−</button><input type="number" id="amtSugar" value="10" min="0" max="40" step="5"><button class="qbtn" data-ai-inc="sugar">+</button><span class="unit">g</span></div>
 </div>
 <div class="ai" data-ai="gelatin">
 <label><input type="checkbox" id="onGel"> Gelatin</label>
@@ -531,6 +542,7 @@ const FRUITS=['banana','mango','kiwi','apple','pear','berries','melon','orange']
 const AI={fruit:{el:'amtFruit',on:'onFruit',food:null,def:100,min:0,max:250,step:25},
 cocoa:{el:'amtCocoa',on:'onCocoa',food:'cocoa',def:5,min:0,max:20,step:1},
 honey:{el:'amtHoney',on:'onHoney',food:'honey',def:15,min:0,max:40,step:5},
+sugar:{el:'amtSugar',on:'onSugar',food:'sugar',def:10,min:0,max:40,step:5},
 gelatin:{el:'amtGel',on:'onGel',food:'gelatin',def:10,min:0,max:20,step:5},
 coconut:{el:'amtCoco',on:'onCoco',food:'coconut',def:5,min:0,max:15,step:1}};
 
@@ -624,10 +636,10 @@ const SLOTS=['Breakfast','Lunch','Snack','Dinner'];
 
 /* ---------- state ---------- */
 const S={age:null,gender:'',height:null,weight:null,act:null,goal:null,
-excl:new Set(),sel:new Set(),recipes:[],targets:null,
+excl:new Set(),sel:new Set(),topOrder:[],openSlots:new Set(),recipes:[],targets:null,
 sm:{base:'milk',vol:300,fruit:'banana',
-on:{fruit:true,cocoa:true,honey:true,gelatin:false,coconut:false},
-amt:{fruit:100,cocoa:5,honey:15,gelatin:10,coconut:5}}};
+on:{fruit:true,cocoa:true,honey:true,sugar:false,gelatin:false,coconut:false},
+amt:{fruit:100,cocoa:5,honey:15,sugar:10,gelatin:10,coconut:5}}};
 const $=id=>document.getElementById(id);
 const round=(x,d=0)=>Math.round(x*Math.pow(10,d))/Math.pow(10,d);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -793,6 +805,7 @@ return {bmr:round(bmr),kcal,carb,prot,fat,pufaCap,floorHit,minFloor,fatFloorHit}
 function mealItems(meal){return meal.it.map(([id,g])=>FMAP[id]?makeItem(FMAP[id],g):null).filter(Boolean);}
 function renderMeals(){
 $('mealLibrary').innerHTML=SLOTS.map(slot=>{
+const isOpen=S.openSlots.has(slot);
 const cards=MEALS.filter(m=>m.slot===slot).map(m=>{
 const items=mealItems(m),t=totalsOf(items);
 const missing=m.it.filter(([id])=>!FMAP[id]||blocked(FMAP[id])).map(([id])=>FMAP[id]?FMAP[id].n:id);
@@ -807,16 +820,41 @@ return '<div class="meal"'+off+'>'+btn+'<div class="mn">'+m.n+'</div>'+
 '<div class="mk">'+round(t.kcal)+' kcal'+pdfTxt+' <span>· P '+round(t.p,1)+' · PUFA '+round(t.pufa,2)+' g</span></div>'+warn+
 '<details><summary>Method</summary><div class="meth">'+m.m+'</div></details></div>';}).join('');
 const cnt=MEALS.filter(m=>m.slot===slot).length;
-return '<div class="cat"><h3>'+slot+'</h3><div class="cap">'+cnt+' meals — add any of them to today.</div><div class="meals">'+cards+'</div></div>';}).join('');}
+return '<div class="cat"><details class="slotdet" data-slot="'+slot+'"'+(isOpen?' open':'')+'><summary>'+slot+' <span class="pill" style="margin-left:auto;margin-right:8px">'+cnt+'</span></summary><div class="cap">'+(isOpen?cnt+' meals — add any of them to today.':'Click to expand '+cnt+' meals')+'</div><div class="meals">'+cards+'</div></details></div>';}).join('');}
+$('mealLibrary').addEventListener('toggle',e=>{
+const det=e.target.closest('details.slotdet');if(!det)return;
+const slot=det.dataset.slot;
+if(det.open)S.openSlots.add(slot);else S.openSlots.delete(slot);
+const cap=det.querySelector('.cap');
+const cnt=MEALS.filter(m=>m.slot===slot).length;
+if(cap)cap.textContent=det.open?cnt+' meals — add any of them to today.':'Click to expand '+cnt+' meals';
+},true);
 $('mealLibrary').addEventListener('click',e=>{
 const b=e.target.closest('[data-meal]');if(!b)return;
 const m=MEALS.find(x=>x.id===b.dataset.meal);if(!m)return;
+S.openSlots.add(m.slot);
 const items=mealItems(m),w=assessEntry(items);
-const commit=()=>{pushRecipe(items,'meal',m.slot+' · '+m.n,m.slot);toast(m.n+' added to '+m.slot+'.');};
+const commit=()=>{pushRecipe(items,'meal',m.slot+' · '+m.n,m.slot);renderMeals();toast(m.n+' added to '+m.slot+'.');};
 if(w.length)askConfirm('Add “'+m.n+'”?','It will appear in today\'s entries as '+m.slot+'.',w,statLine(items),commit);
 else commit();});
 
 /* ---------- ROW 5 : custom foods ---------- */
+function promoteItems(ids){
+const list=Array.isArray(ids)?ids:[ids];
+list.forEach(id=>{
+S.topOrder=S.topOrder.filter(x=>x!==id);
+S.topOrder.unshift(id);
+});
+renderLibrary();renderDrinks();}
+function sortByTop(arr){
+if(!S.topOrder.length)return arr;
+return arr.slice().sort((a,b)=>{
+const ia=S.topOrder.indexOf(a.id),ib=S.topOrder.indexOf(b.id);
+if(ia===-1&&ib===-1)return 0;
+if(ia===-1)return 1;
+if(ib===-1)return -1;
+return ia-ib;
+});}
 function foodCard(f){
 const off=blocked(f),on=S.sel.has(f.id)?' on':'';
 const portion=f.unit==='egg'?(f.std/(f.eggG||50))+' eggs':f.std+' g';
@@ -827,7 +865,7 @@ return '<div class="food'+on+(off?' off':'')+'" data-id="'+f.id+'" title="'+f.n+
 function renderLibrary(){
 $('library').innerHTML=CATS.map(c=>
 '<div class="cat"><h3>'+c.t+'</h3><div class="cap">'+c.cap+'</div><div class="foods">'+
-FOODS.filter(f=>f.cat===c.k&&!f.hidden).map(foodCard).join('')+'</div></div>').join('');
+sortByTop(FOODS.filter(f=>f.cat===c.k&&!f.hidden)).map(foodCard).join('')+'</div></div>').join('');
 refreshSelCount();}
 function refreshSelCount(){
 $('selcount').textContent=S.sel.size+' item'+(S.sel.size===1?'':'s')+' selected';
@@ -842,7 +880,7 @@ const id=el.dataset.id;S.sel.has(id)?S.sel.delete(id):S.sel.add(id);renderLibrar
 function quickAdd(id){
 const f=FMAP[id];if(!f)return;
 const items=[makeItem(f)],w=assessEntry(items);
-const commit=()=>{pushRecipe(items,'single',f.n);toast(f.n+' added.');};
+const commit=()=>{pushRecipe(items,'single',f.n);promoteItems(id);toast(f.n+' added.');};
 if(w.length)askConfirm('Add '+f.n+' on its own?','You can add anything — these are flags, not blocks.',w,statLine(items),commit);
 else commit();}
 $('clearSel').onclick=()=>{S.sel.clear();renderLibrary();renderDrinks();update();};
@@ -856,13 +894,13 @@ const ids=[...S.sel].filter(id=>FMAP[id]&&!blocked(FMAP[id]));
 if(!ids.length){toast('Nothing selectable — check exclusions.');return;}
 const items=ids.map(id=>makeItem(FMAP[id]));
 const base=slotNow(),name=slotName(base),w=assessEntry(items);
-const commit=()=>{pushRecipe(items,'group',name,base);toast(name+' added ('+items.length+' items).');};
+const commit=()=>{pushRecipe(items,'group',name,base);promoteItems(ids);toast(name+' added ('+items.length+' items).');};
 if(w.length)askConfirm('Add '+items.length+' items as '+name+'?','Grouped at standard portions — edit grams afterwards.',w,statLine(items),commit);
 else commit();};
 
 /* ---------- ROW 6 : drinks ---------- */
 function renderDrinks(){
-$('drinkGrid').innerHTML=FOODS.filter(f=>f.cat==='drink').map(f=>{
+$('drinkGrid').innerHTML=sortByTop(FOODS.filter(f=>f.cat==='drink')).map(f=>{
 const off=blocked(f),on=S.sel.has(f.id)?' on':'';
 const plus=off?'':'<button class="qadd" data-add="'+f.id+'" title="Add '+f.n+' plain">+</button>';
 return '<div class="dchip'+on+(off?' off':'')+'" data-id="'+f.id+'" title="'+f.n+' — per 100 g: '+f.kcal+' kcal, C '+f.c+' P '+f.p+' F '+f.f+', PUFA '+f.pufa+' g">'+plus+svg(f.ic,38)+'<div class="n">'+f.n+'</div><div class="p">'+f.std+' g · '+round(f.kcal*f.std/100)+' kcal</div></div>';}).join('');}
@@ -893,7 +931,7 @@ const out=[],base=FMAP[cfg.base];
 if(base&&!blocked(base))out.push({f:base,g:cfg.vol});
 if(cfg.on.fruit){const fr=FMAP[cfg.fruit];
 if(fr&&cfg.amt.fruit>0&&!blocked(fr))out.push({f:fr,g:cfg.amt.fruit});}
-['cocoa','honey','gelatin','coconut'].forEach(k=>{
+['cocoa','honey','sugar','gelatin','coconut'].forEach(k=>{
 const f=FMAP[AI[k].food];
 if(cfg.on[k]&&cfg.amt[k]>0&&f&&!blocked(f))out.push({f:f,g:cfg.amt[k]});});
 return out;}
@@ -902,29 +940,29 @@ const its=drinkItems(S.sm),t=totalsOf(its);
 $('smPreview').innerHTML=its.length?('<strong>'+round(t.kcal)+' kcal</strong> · C '+round(t.c,1)+' · P '+round(t.p,1)+' · F '+round(t.f,1)+' · PUFA '+round(t.pufa,2)+' g'):'Nothing selected — check exclusions.';}
 $('smBase').addEventListener('change',()=>{
 S.sm.base=$('smBase').value;const f=FMAP[S.sm.base];
-if(f){S.sm.vol=f.std;$('smVol').value=f.std;}previewDrink();});
+if(f){S.sm.vol=f.std;$('smVol').value=f.std;}previewDrink();autosave();});
 $('smVol').addEventListener('change',()=>{
 S.sm.vol=Math.max(20,Math.min(700,parseFloat($('smVol').value)||300));
-$('smVol').value=S.sm.vol;previewDrink();});
-$('smFruit').addEventListener('change',()=>{S.sm.fruit=$('smFruit').value;previewDrink();});
+$('smVol').value=S.sm.vol;previewDrink();autosave();});
+$('smFruit').addEventListener('change',()=>{S.sm.fruit=$('smFruit').value;previewDrink();autosave();});
 Object.keys(AI).forEach(k=>{
-$(AI[k].on).addEventListener('change',e=>{S.sm.on[k]=e.target.checked;syncAddins();previewDrink();});
+$(AI[k].on).addEventListener('change',e=>{S.sm.on[k]=e.target.checked;syncAddins();previewDrink();autosave();});
 $(AI[k].el).addEventListener('change',e=>{
 S.sm.amt[k]=clampAi(k,parseFloat(e.target.value));e.target.value=S.sm.amt[k];
 if(S.sm.amt[k]>0&&!S.sm.on[k]){S.sm.on[k]=true;$(AI[k].on).checked=true;syncAddins();}
-previewDrink();});});
+previewDrink();autosave();});});
 $('addins').addEventListener('click',e=>{
 const inc=e.target.closest('[data-ai-inc]'),dec=e.target.closest('[data-ai-dec]');
 if(!inc&&!dec)return;
 const k=inc?inc.dataset.aiInc:dec.dataset.aiDec,a=AI[k];
 S.sm.amt[k]=clampAi(k,S.sm.amt[k]+(inc?a.step:-a.step));$(a.el).value=S.sm.amt[k];
 if(S.sm.amt[k]>0&&!S.sm.on[k]){S.sm.on[k]=true;$(a.on).checked=true;syncAddins();}
-previewDrink();});
+previewDrink();autosave();});
 $('addDrink').onclick=()=>{
 const its=drinkItems(S.sm);
 if(!its.length){toast('No ingredients available — check exclusions.');return;}
 const w=assessEntry(its);
-const commit=()=>{pushRecipe(its,'drink');toast('Drink added.');};
+const commit=()=>{pushRecipe(its,'drink');promoteItems(its.map(x=>x.f.id));toast('Drink added.');};
 if(w.length)askConfirm('Add this drink?','Built from your row 6 settings.',w,statLine(its),commit);
 else commit();};
 
@@ -935,6 +973,7 @@ const fruit=ids.find(i=>FRUITS.includes(i));
 const bn=base?base.n:'Drink';
 if(fruit)return bn+' + '+FMAP[fruit].n.toLowerCase();
 if(ids.includes('cocoa'))return bn+' with cocoa';
+if(ids.includes('sugar'))return bn+' with sugar';
 return bn;}
 function dishName(list){
 const c1=list.find(i=>i.f.cat==='carb'&&!SMALL.has(i.f.id)),p1=list.find(i=>i.f.cat==='prot'&&i.f.id!=='gelatin');
@@ -1041,6 +1080,7 @@ if(base)steps.push(base.milky?('Prepare '+round(g(base.id))+' g '+base.n.toLower
 if(has('gelatin'))steps.push('Stir the bloomed gelatin into the warm liquid until fully dissolved.');
 if(has('cocoa'))steps.push('Whisk in '+g('cocoa')+' g cocoa powder.');
 if(has('honey'))steps.push('Sweeten with '+g('honey')+' g honey.');
+if(has('sugar'))steps.push('Stir in '+g('sugar')+' g white sugar until dissolved.');
 if(has('coconut'))steps.push('Blend in '+g('coconut')+' g coconut oil so it emulsifies (milk drinks only).');
 FRUITS.forEach(id=>{if(has(id))steps.push('Blend in '+g(id)+' g '+FMAP[id].n.toLowerCase()+'.');});
 steps.push('Blend or whisk until smooth. Drink it with a meal rather than alone.');
@@ -1140,11 +1180,12 @@ $('recipes').addEventListener('click',e=>{
 const del=e.target.closest('[data-del]');
 if(del){S.recipes=S.recipes.filter(r=>r.id!==del.dataset.del);renderRecipes();update();return;}
 const b=e.target.closest('[data-act]');if(!b||b.tagName==='INPUT')return;
-const act=b.dataset.act;
-if(act==='edit'){openMacroEditor(b.dataset.r,+b.dataset.i);return;}
 const r=S.recipes.find(x=>x.id===b.dataset.r);if(!r)return;
-const it=r.items[+b.dataset.i];if(!it)return;
-if(act==='rm')r.items.splice(+b.dataset.i,1);
+const idx=+b.dataset.i;
+const it=r.items[idx];if(!it)return;
+const act=b.dataset.act;
+if(act==='edit'){openMacroEditor(r.id,idx);return;}
+if(act==='rm')r.items.splice(idx,1);
 else{const st=it.f.unit==='egg'?1:(it.f.step||5),d=act==='inc'?st:-st;
 if(it.f.unit==='egg')it.n=Math.max(0,it.n+d);else it.g=Math.max(0,round(it.g+d,1));}
 r.items=r.items.filter(x=>x.f.unit==='egg'?x.n>0:x.g>0);
@@ -1161,8 +1202,30 @@ if(!r.items.length)S.recipes=S.recipes.filter(x=>x.id!==r.id);else recalc(r);
 renderRecipes();update();});
 $('clearAll').onclick=()=>{S.recipes=[];renderRecipes();update();};
 
-/* ---------- save / load ---------- */
-const KEY='peatPlannerPlans_v6',AUTO='peatPlannerAutosave_v6';
+/* ---------- save / load & cookies ---------- */
+const KEY='peatPlannerPlans_v6',AUTO='peatPlannerAutosave_v6',COOKIE_KEY='peatPlannerPrefs_v1';
+function setCookie(name,val,days){
+try{
+const d=new Date();d.setTime(d.getTime()+(days||365)*864e5);
+document.cookie=name+'='+encodeURIComponent(val)+';expires='+d.toUTCString()+';path=/;SameSite=Lax';
+}catch(e){}}
+function getCookie(name){
+try{
+const prefix=name+'=';
+const parts=document.cookie.split(';');
+for(let i=0;i<parts.length;i++){
+const c=parts[i].trim();
+if(c.indexOf(prefix)===0)return decodeURIComponent(c.substring(prefix.length));
+}}catch(e){}
+return null;}
+function savePrefsCookie(){
+const prefs={
+profile:{age:S.age,gender:S.gender,height:S.height,weight:S.weight,act:S.act,goal:S.goal,excl:[...S.excl]},
+sel:[...S.sel],
+topOrder:S.topOrder.slice(0,40),
+sm:S.sm
+};
+setCookie(COOKIE_KEY,JSON.stringify(prefs),365);}
 function store(){try{return window.localStorage;}catch(e){return null;}}
 function readPlans(){const ls=store();if(!ls)return [];try{return JSON.parse(ls.getItem(KEY)||'[]');}catch(e){return [];}}
 function writePlans(p){const ls=store();if(!ls){toast('Storage unavailable — use Export instead.');return false;}
@@ -1170,7 +1233,7 @@ try{ls.setItem(KEY,JSON.stringify(p));return true;}catch(e){toast('Could not sav
 function snapshot(name){
 return {v:6,name:name||'Untitled plan',savedAt:new Date().toISOString(),
 profile:{age:S.age,gender:S.gender,height:S.height,weight:S.weight,act:S.act,goal:S.goal,excl:[...S.excl]},
-sm:S.sm,sel:[...S.sel],
+sm:S.sm,sel:[...S.sel],topOrder:S.topOrder,
 recipes:S.recipes.map(r=>({id:r.id,name:r.name,kind:r.kind,slot:r.slot,items:r.items.map(it=>{
 const obj={id:it.f.id,g:it.g,n:it.n};
 if(it.ov)obj.ov=Object.assign({},it.ov);
@@ -1180,10 +1243,11 @@ if(!p||!p.profile)return false;
 S.age=p.profile.age;S.gender=p.profile.gender||'';S.height=p.profile.height;S.weight=p.profile.weight;
 S.act=p.profile.act;S.goal=p.profile.goal;S.excl=new Set(p.profile.excl||[]);
 S.sel=new Set((p.sel||[]).filter(id=>FMAP[id]));
+S.topOrder=Array.isArray(p.topOrder)?p.topOrder.filter(id=>FMAP[id]):[];
 if(p.sm){
 S.sm=Object.assign({base:'milk',vol:300,fruit:'banana'},p.sm);
-S.sm.on=Object.assign({fruit:true,cocoa:true,honey:true,gelatin:false,coconut:false},p.sm.on||{});
-S.sm.amt=Object.assign({fruit:100,cocoa:5,honey:15,gelatin:10,coconut:5},p.sm.amt||{});}
+S.sm.on=Object.assign({fruit:true,cocoa:true,honey:true,sugar:false,gelatin:false,coconut:false},p.sm.on||{});
+S.sm.amt=Object.assign({fruit:100,cocoa:5,honey:15,sugar:10,gelatin:10,coconut:5},p.sm.amt||{});}
 S.recipes=(p.recipes||[]).map(r=>{
 const items=(r.items||[]).map(x=>{const f=FMAP[x.id];if(!f)return null;
 const it=f.unit==='egg'?{f:f,n:x.n||1}:{f:f,g:x.g||f.std};
@@ -1241,7 +1305,9 @@ else toast('That file is not a valid plan.');}catch(err){toast('Could not read t
 $('importFile').value='';};
 rd.readAsText(file);});
 let autoTimer=null;
-function autosave(){const ls=store();if(!ls)return;
+function autosave(){
+savePrefsCookie();
+const ls=store();if(!ls)return;
 clearTimeout(autoTimer);
 autoTimer=setTimeout(()=>{try{ls.setItem(AUTO,JSON.stringify(snapshot('Autosave')));
 $('saveState').textContent='Autosaved '+new Date().toLocaleTimeString();}catch(e){}},600);}
@@ -1296,9 +1362,20 @@ function renderAll(){renderMeals();renderLibrary();renderDrinks();fillBuilder();
 
 /* ---------- boot ---------- */
 renderAll();renderSaved();
-(function(){const ls=store();if(!ls)return;
+(function(){
+let restored=false;
+const ls=store();
+if(ls){
 try{const a=JSON.parse(ls.getItem(AUTO)||'null');
-if(a&&restore(a))$('saveState').textContent='Restored your last session.';}catch(e){}})();
+if(a&&restore(a)){restored=true;$('saveState').textContent='Restored your last session.';}}catch(e){}
+}
+if(!restored){
+try{
+const c=JSON.parse(getCookie(COOKIE_KEY)||'null');
+if(c&&restore(c))$('saveState').textContent='Restored preferences from cookie.';
+}catch(e){}
+}
+})();
 setInterval(refreshSelCount,60000);
 </script>
 </body>
