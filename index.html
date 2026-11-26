@@ -194,7 +194,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <div class="hint" id="actdesc" style="margin-top:6px">Pick the description that matches a typical week.</div></div>
 <div><label class="f">Goal</label>
 <div class="seg" id="goal"><button data-g="loss">Fat loss</button><button data-g="maintain">Maintain</button><button data-g="gain">Gain</button></div>
-<div class="hint" style="margin-top:6px">Fat loss capped at −15% (gentle).</div></div>
+<div class="hint" style="margin-top:6px">Fat loss −15% (gentle) · Gain +12%.</div></div>
 </div>
 </section>
 
@@ -229,7 +229,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <div class="rowhead"><span class="step green">ROW 4</span><h2>Food Library</h2>
 <span class="hint">Ready-made meals — mix and match freely · press <strong>+</strong> to send one to today's entries</span></div>
 <div class="grid g4" id="mealLibrary"></div>
-<div class="note" style="margin-top:12px">Portions adapted from your meal plan. High-PUFA items were reduced and calories made up with low-PUFA foods: almonds → cheese, trout → cod, oats → rice, olive oil → coconut oil, two eggs → one where cheese is generous. Every card shows the computed kcal and the original plan figure; adjust grams in row 7 after adding.</div>
+<div class="note" style="margin-top:12px">Portions use <strong>net edible weight</strong> (peeled/trimmed fruit &amp; veg, raw meat/fish weights before cooking). High-PUFA items were reduced and calories made up with low-PUFA foods. Every card shows the computed kcal and the original plan figure; adjust grams or click any food name in row 7 after adding.</div>
 </section>
 
 <!-- ROW 5 : CUSTOM FOOD LIBRARY -->
@@ -294,7 +294,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 
 <!-- ROW 7 -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 7</span><h2>Today's entries &amp; daily progress</h2><span class="hint">Use − / + or type to edit portions · click any food name to customize its protein or fat %</span></div>
+<div class="rowhead"><span class="step">ROW 7</span><h2>Today's entries &amp; daily progress</h2><span class="hint">Use − / + or type to edit net portions · click any food name to customize its protein or fat %</span></div>
 <div class="macro" style="margin-bottom:14px">
 <div class="mcard"><div class="k">Consumed / target</div><div class="v" id="totK">0</div><div class="s" id="totKs">kcal</div><div class="bar"><i id="barK" style="width:0%;background:var(--accent)"></i></div></div>
 <div class="mcard"><div class="k" style="color:var(--carb)">Carbs</div><div class="v" id="totC">0</div><div class="s" id="totCs">g</div><div class="bar"><i id="barC" style="width:0%;background:var(--carb)"></i></div></div>
@@ -371,7 +371,9 @@ milk:'<rect x="13" y="9" width="18" height="30" rx="3" fill="#fff" stroke="#c9c2
 promilk:'<rect x="12" y="8" width="20" height="32" rx="3" fill="#fff" stroke="#c9c2b4"/><rect x="12" y="8" width="20" height="7" fill="#cfe3d8"/><rect x="14" y="19" width="16" height="19" fill="#f4fbf7"/><path d="M16 5h12v4H16z" fill="#cfe3d8"/><text x="22" y="31" font-size="9" font-weight="700" text-anchor="middle" fill="#2f7d62">P</text>',
 cheese:'<path d="M6 30l26-14 6 6-26 14z" fill="#f2c14e"/><path d="M6 30v6l26 6v-6z" fill="#e0a92f"/><circle cx="20" cy="28" r="2.2" fill="#fff6d8"/><circle cx="28" cy="24" r="1.6" fill="#fff6d8"/>',
 feta:'<rect x="9" y="16" width="26" height="18" rx="2" fill="#fdfcf7" stroke="#d8d2c4"/><path d="M9 22h26M15 16v18M27 16v18" stroke="#eae4d6" stroke-width="1.4"/><circle cx="19" cy="27" r="1.2" fill="#eee8da"/>',
+tulum:'<path d="M10 31l12-17 12 17z" fill="#f5e6c4" stroke="#d6c296"/><circle cx="20" cy="24" r="1.5" fill="#d6c296"/><circle cx="25" cy="26" r="1.8" fill="#d6c296"/><circle cx="18" cy="28" r="1.2" fill="#d6c296"/><circle cx="23" cy="21" r="1.1" fill="#d6c296"/>',
 cottage:'<path d="M8 20h28l-3 18H11z" fill="#eae3d5"/><ellipse cx="22" cy="20" rx="14" ry="5" fill="#fff"/><circle cx="17" cy="19" r="2.4" fill="#f3f0e8"/><circle cx="24" cy="21" r="2.8" fill="#f3f0e8"/><circle cx="28" cy="18" r="2" fill="#f3f0e8"/>',
+cottage2:'<path d="M8 20h28l-3 18H11z" fill="#dbe6ec"/><ellipse cx="22" cy="20" rx="14" ry="5" fill="#f7fbff"/><circle cx="17" cy="19" r="2.2" fill="#e5eff5"/><circle cx="24" cy="21" r="2.6" fill="#e5eff5"/><circle cx="28" cy="18" r="1.9" fill="#e5eff5"/>',
 yogurt:'<path d="M12 14h20l-2 24H14z" fill="#fff" stroke="#c9c2b4"/><ellipse cx="22" cy="14" rx="10" ry="3.5" fill="#f6e7ef"/><path d="M14 24h16l-1 12H15z" fill="#fbeff5"/>',
 icecream:'<path d="M16 22h12l-6 18z" fill="#e0b070"/><circle cx="22" cy="17" r="8" fill="#fff8ea"/><circle cx="17" cy="20" r="5" fill="#fdf1dc"/><circle cx="27" cy="20" r="5" fill="#fdf1dc"/>',
 juice:'<path d="M13 10h18l-2 28H15z" fill="#fff" stroke="#c9c2b4"/><path d="M14.6 20h14.8l-1.4 17H16z" fill="#f59b2c"/><path d="M27 6l6 4-4 3" stroke="#8a7bb8" stroke-width="2" fill="none"/>',
@@ -430,92 +432,92 @@ coconut:'<circle cx="22" cy="24" r="14" fill="#8a6a4a"/><circle cx="22" cy="24" 
 oliveoil:'<path d="M18 12h8v6l4 6v14a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3V24l4-6z" fill="#dfe7c8" stroke="#b9c49a"/><path d="M15 27h14v11a2 2 0 0 1-2 2H17a2 2 0 0 1-2-2z" fill="#b7a53a"/><rect x="18" y="8" width="8" height="5" rx="1.5" fill="#8a7a3a"/><ellipse cx="33" cy="16" rx="4" ry="2.6" fill="#7d9a4a" transform="rotate(-25 33 16)"/>',
 coffee:'<path d="M11 16h20v12a10 10 0 0 1-20 0z" fill="#fff" stroke="#c9c2b4"/><path d="M13 19h16v9a8 8 0 0 1-16 0z" fill="#6b4426"/><path d="M31 19h4a4 4 0 0 1 0 8h-4" fill="none" stroke="#c9c2b4" stroke-width="2"/><path d="M18 10c2-2 0-4 0-4M24 10c2-2 0-4 0-4" stroke="#c9c2b4" stroke-width="1.6" fill="none"/>',
 cocoa:'<path d="M12 16h20v12a10 10 0 0 1-20 0z" fill="#fff" stroke="#c9c2b4"/><path d="M14 19h16v9a8 8 0 0 1-16 0z" fill="#7a4a2a"/><circle cx="19" cy="22" r="1.5" fill="#a9714a"/><circle cx="25" cy="25" r="1.5" fill="#a9714a"/>',
-whitefish:'<path d="M8 24c8-9 22-9 28 0-6 9-20 9-28 0z" fill="#dfe7ef"/><path d="M36 24l6-6v12z" fill="#c6d3de"/><circle cx="14" cy="22" r="1.5" fill="#3a2a20"/>',
-otherfish:'<path d="M7 24c9-10 23-10 29 0-6 10-20 10-29 0z" fill="#b7cadb"/><path d="M36 24l6-6v12z" fill="#98b2c9"/><path d="M17 17c2 4 2 10 0 14" stroke="#8ca6be" stroke-width="1.5" fill="none"/><circle cx="13" cy="22" r="1.5" fill="#3a2a20"/>'
-};
-const svg=(k,s)=>'<svg width="'+s+'" height="'+s+'" viewBox="0 0 44 44">'+(ICON[k]||'')+'</svg>';
-
-/* ---------- food database, per 100 g ---------- */
-/* Note on fried eggs:
-   Large egg (60g) + 2.5g butter = 62.5g total per egg.
-   Per 62.5g: kcal = 93 + 17.925 = 110.925, c = 0.6625, p = 7.5825, f = 8.3875, pufa = 0.915
-   Per 100g:  kcal = 177.5, c = 1.06, p = 12.13, f = 13.42, pufa = 1.46
-   Medium egg (50g) + 2.5g butter = 52.5g total per egg.
-   Per 52.5g: kcal = 77.5 + 17.925 = 95.425, c = 0.5525, p = 6.3225, f = 7.3275, pufa = 0.775
-   Per 100g:  kcal = 181.8, c = 1.05, p = 12.04, f = 13.96, pufa = 1.48
+/* ---------- food database, per 100 g net edible portion ---------- */
+/* Audited against USDA FoodData Central (edible portion without peels, shells, pits, or bones).
+   Meats & fish are standardized to raw net weight (except shrimp: cooked, peeled).
+   Eggs use USDA peeled net edible weights: Large = 50 g, Medium = 44 g.
+   Fried eggs include +2.5 g butter per egg:
+   - Fried Large (50g egg + 2.5g butter = 52.5g): 95.4 kcal, 0.55g C, 6.32g P, 7.33g F, 0.76g PUFA -> per 100g: 181.8 kcal, 1.05 C, 12.04 P, 13.96 F, 1.44 PUFA
+   - Fried Medium (44g egg + 2.5g butter = 46.5g): 86.1 kcal, 0.49g C, 5.57g P, 6.69g F, 0.67g PUFA -> per 100g: 185.2 kcal, 1.05 C, 11.97 P, 14.39 F, 1.45 PUFA
 */
 const FOODS=[
 {id:'oj',n:'Orange juice',cat:'drink',ic:'juice',kcal:45,c:10.4,p:0.7,f:0.2,pufa:0.04,std:250,step:25,ex:[]},
 {id:'pomj',n:'Pomegranate juice',cat:'drink',ic:'pom',kcal:54,c:13.1,p:0.2,f:0.3,pufa:0.05,std:200,step:25,ex:[]},
 {id:'grapej',n:'Grape juice',cat:'drink',ic:'grapejuice',kcal:60,c:14.8,p:0.4,f:0.1,pufa:0.03,std:200,step:25,ex:[]},
-{id:'applej',n:'Apple juice (clear)',cat:'drink',ic:'applejuice',kcal:46,c:11.3,p:0.1,f:0.1,pufa:0.02,std:200,step:25,ex:[]},
+{id:'applej',n:'Apple juice (clear)',cat:'drink',ic:'applejuice',kcal:46,c:11.3,p:0.1,f:0.1,pufa:0.03,std:200,step:25,ex:[]},
 {id:'milk',n:'Whole milk',cat:'drink',ic:'milk',kcal:61,c:4.8,p:3.3,f:3.3,pufa:0.12,std:300,step:25,milky:true,ex:['dairy']},
 {id:'skimmilk',n:'Skim milk',cat:'drink',ic:'milk',kcal:34,c:5.0,p:3.4,f:0.1,pufa:0.01,std:350,step:25,milky:true,ex:['dairy']},
-{id:'promilk',n:'Protein milk (50 g/L)',cat:'drink',ic:'promilk',kcal:53,c:4.8,p:5.0,f:1.5,pufa:0.06,std:300,step:25,milky:true,ex:['dairy']},
-{id:'chocmilk',n:'Cocoa milk (sweetened)',cat:'drink',ic:'chocmilk',kcal:78,c:11.0,p:3.0,f:2.5,pufa:0.15,std:250,step:25,milky:true,ex:['dairy','caffeine']},
+{id:'promilk',n:'Protein milk (50 g/L)',cat:'drink',ic:'promilk',kcal:53,c:4.8,p:5.0,f:1.5,pufa:0.05,std:300,step:25,milky:true,ex:['dairy']},
+{id:'chocmilk',n:'Cocoa milk (sweetened)',cat:'drink',ic:'chocmilk',kcal:78,c:11.0,p:3.0,f:2.5,pufa:0.10,std:250,step:25,milky:true,ex:['dairy','caffeine']},
 {id:'banmilk',n:'Banana milk smoothie',cat:'drink',ic:'smoothie',kcal:78,c:13.5,p:2.6,f:1.9,pufa:0.09,std:300,step:25,milky:true,ex:['dairy']},
 {id:'coffee',n:'Coffee (black)',cat:'drink',ic:'coffee',kcal:1,c:0.0,p:0.1,f:0.0,pufa:0.00,std:200,step:50,ex:['caffeine']},
-{id:'espresso',n:'Espresso',cat:'drink',ic:'espresso',kcal:9,c:1.7,p:0.1,f:0.2,pufa:0.10,std:30,step:10,ex:['caffeine']},
+{id:'espresso',n:'Espresso',cat:'drink',ic:'espresso',kcal:9,c:1.7,p:0.1,f:0.2,pufa:0.09,std:30,step:10,ex:['caffeine']},
 {id:'americano',n:'Americano',cat:'drink',ic:'americano',kcal:2,c:0.3,p:0.0,f:0.0,pufa:0.02,std:180,step:30,ex:['caffeine']},
 {id:'cappuccino',n:'Cappuccino',cat:'drink',ic:'cappuccino',kcal:52,c:4.3,p:2.7,f:2.8,pufa:0.12,std:170,step:20,milky:true,ex:['dairy','caffeine']},
 {id:'flatwhite',n:'Flat white',cat:'drink',ic:'flatwhite',kcal:51,c:4.2,p:2.7,f:2.7,pufa:0.12,std:160,step:20,milky:true,ex:['dairy','caffeine']},
 {id:'latte',n:'Latte',cat:'drink',ic:'latte',kcal:54,c:4.4,p:2.9,f:2.9,pufa:0.12,std:230,step:20,milky:true,ex:['dairy','caffeine']},
 {id:'cortado',n:'Cortado / macchiato',cat:'drink',ic:'cortado',kcal:39,c:3.5,p:1.9,f:2.0,pufa:0.11,std:70,step:10,milky:true,ex:['dairy','caffeine']},
-{id:'orange',n:'Ripe orange',cat:'carb',ic:'orange',kcal:47,c:11.8,p:0.9,f:0.1,pufa:0.03,std:180,step:20,ex:[]},
-{id:'mango',n:'Ripe mango',cat:'carb',ic:'mango',kcal:60,c:15.0,p:0.8,f:0.4,pufa:0.09,std:150,step:25,ex:[]},
-{id:'kiwi',n:'Kiwi fruit',cat:'carb',ic:'kiwi',kcal:61,c:14.7,p:1.1,f:0.5,pufa:0.29,std:150,step:25,ex:[]},
-{id:'banana',n:'Ripe banana',cat:'carb',ic:'banana',kcal:89,c:22.8,p:1.1,f:0.3,pufa:0.07,std:120,step:20,ex:[]},
-{id:'apple',n:'Apple',cat:'carb',ic:'apple',kcal:52,c:13.8,p:0.3,f:0.2,pufa:0.05,std:150,step:25,ex:[]},
-{id:'pear',n:'Pear (cooked)',cat:'carb',ic:'pear',kcal:57,c:15.2,p:0.4,f:0.1,pufa:0.03,std:150,step:25,ex:[]},
-{id:'melon',n:'Melon',cat:'carb',ic:'melon',kcal:34,c:8.2,p:0.8,f:0.2,pufa:0.05,std:200,step:25,ex:[]},
-{id:'grapes',n:'Grapes',cat:'carb',ic:'grapes',kcal:69,c:18.1,p:0.7,f:0.2,pufa:0.05,std:150,step:25,ex:[]},
-{id:'berries',n:'Strawberries',cat:'carb',ic:'berries',kcal:36,c:7.7,p:0.7,f:0.3,pufa:0.16,std:150,step:25,ex:[]},
+{id:'orange',n:'Ripe orange (peeled)',cat:'carb',ic:'orange',kcal:47,c:11.8,p:0.9,f:0.1,pufa:0.03,std:180,step:20,ex:[]},
+{id:'mango',n:'Ripe mango (flesh)',cat:'carb',ic:'mango',kcal:60,c:15.0,p:0.8,f:0.4,pufa:0.09,std:150,step:25,ex:[]},
+{id:'kiwi',n:'Kiwi fruit (peeled)',cat:'carb',ic:'kiwi',kcal:61,c:14.7,p:1.1,f:0.5,pufa:0.29,std:150,step:25,ex:[]},
+{id:'banana',n:'Ripe banana (peeled)',cat:'carb',ic:'banana',kcal:89,c:22.8,p:1.1,f:0.3,pufa:0.07,std:120,step:20,ex:[]},
+{id:'apple',n:'Apple (cored)',cat:'carb',ic:'apple',kcal:52,c:13.8,p:0.3,f:0.2,pufa:0.05,std:150,step:25,ex:[]},
+{id:'pear',n:'Pear (peeled/cored)',cat:'carb',ic:'pear',kcal:57,c:15.2,p:0.4,f:0.1,pufa:0.03,std:150,step:25,ex:[]},
+{id:'melon',n:'Melon (flesh)',cat:'carb',ic:'melon',kcal:34,c:8.2,p:0.8,f:0.2,pufa:0.05,std:200,step:25,ex:[]},
+{id:'grapes',n:'Grapes (seedless)',cat:'carb',ic:'grapes',kcal:69,c:18.1,p:0.7,f:0.2,pufa:0.05,std:150,step:25,ex:[]},
+{id:'berries',n:'Strawberries (hulled)',cat:'carb',ic:'berries',kcal:32,c:7.7,p:0.7,f:0.3,pufa:0.16,std:150,step:25,ex:[]},
 {id:'honey',n:'Honey',cat:'carb',ic:'honey',kcal:304,c:82.4,p:0.3,f:0.0,pufa:0.00,std:20,step:5,ex:[]},
 {id:'sugar',n:'White sugar',cat:'carb',ic:'sugar',kcal:387,c:100,p:0.0,f:0.0,pufa:0.00,std:15,step:5,ex:[]},
-{id:'potato',n:'Boiled potato',cat:'carb',ic:'potato',kcal:87,c:20.1,p:1.9,f:0.1,pufa:0.04,std:250,step:25,ex:[]},
+{id:'potato',n:'Boiled potato (peeled)',cat:'carb',ic:'potato',kcal:87,c:20.1,p:1.9,f:0.1,pufa:0.04,std:250,step:25,ex:[]},
 {id:'rice',n:'White rice (cooked)',cat:'carb',ic:'rice',kcal:130,c:28.2,p:2.7,f:0.3,pufa:0.10,std:200,step:25,ex:[]},
 {id:'rice_dry',n:'White rice (dry)',cat:'carb',ic:'rice_dry',kcal:365,c:80.0,p:7.1,f:0.7,pufa:0.20,std:60,step:10,ex:[]},
 {id:'sourdough',n:'Sourdough bread',cat:'carb',ic:'bread',kcal:240,c:48.0,p:8.0,f:1.5,pufa:0.60,std:60,step:10,mod:true,ex:['gluten']},
 {id:'yufka',n:'Yufka / flatbread',cat:'carb',ic:'yufka',kcal:300,c:60.0,p:9.0,f:2.0,pufa:0.80,std:60,step:10,mod:true,ex:['gluten']},
 {id:'vermicelli',n:'Vermicelli (dry)',cat:'carb',ic:'vermicelli',kcal:371,c:74.7,p:12.0,f:1.5,pufa:0.60,std:40,step:10,mod:true,ex:['gluten']},
 {id:'oats',n:'Rolled oats (dry)',cat:'carb',ic:'oats',kcal:379,c:67.7,p:13.2,f:6.5,pufa:2.40,std:50,step:10,mod:true,ex:['gluten']},
-{id:'carrot',n:'Cooked carrot',cat:'carb',ic:'carrot',kcal:35,c:8.2,p:0.8,f:0.2,pufa:0.10,std:120,step:20,ex:[]},
-{id:'carrotsalad',n:'Raw carrot salad',cat:'carb',ic:'carrotsalad',kcal:82,c:9.1,p:0.9,f:4.9,pufa:0.20,std:120,step:20,ex:[]},
-{id:'tomato',n:'Tomato',cat:'carb',ic:'tomato',kcal:18,c:3.9,p:0.9,f:0.2,pufa:0.08,std:150,step:25,ex:[]},
-{id:'cucumber',n:'Cucumber',cat:'carb',ic:'cucumber',kcal:15,c:3.6,p:0.7,f:0.1,pufa:0.03,std:150,step:25,ex:[]},
-{id:'onion',n:'Onion (cooked)',cat:'carb',ic:'onion',kcal:40,c:9.3,p:1.1,f:0.1,pufa:0.04,std:50,step:10,ex:[]},
-{id:'mushroom',n:'Mushrooms (well cooked)',cat:'carb',ic:'mushroom',kcal:28,c:5.3,p:2.2,f:0.5,pufa:0.20,std:100,step:25,mod:true,ex:[]},
-{id:'squash',n:'Cooked squash',cat:'carb',ic:'squash',kcal:45,c:10.0,p:1.0,f:0.1,pufa:0.05,std:150,step:25,ex:[]},
+{id:'carrot',n:'Cooked carrot (peeled)',cat:'carb',ic:'carrot',kcal:35,c:8.2,p:0.8,f:0.2,pufa:0.10,std:120,step:20,ex:[]},
+{id:'carrotsalad',n:'Raw carrot salad (net)',cat:'carb',ic:'carrotsalad',kcal:82,c:9.1,p:0.9,f:4.9,pufa:0.18,std:120,step:20,ex:[]},
+{id:'tomato',n:'Tomato (net)',cat:'carb',ic:'tomato',kcal:18,c:3.9,p:0.9,f:0.2,pufa:0.08,std:150,step:25,ex:[]},
+{id:'cucumber',n:'Cucumber (net)',cat:'carb',ic:'cucumber',kcal:15,c:3.6,p:0.7,f:0.1,pufa:0.03,std:150,step:25,ex:[]},
+{id:'onion',n:'Onion (peeled, cooked)',cat:'carb',ic:'onion',kcal:40,c:9.3,p:1.1,f:0.1,pufa:0.04,std:50,step:10,ex:[]},
+{id:'mushroom',n:'Mushrooms (trimmed, cooked)',cat:'carb',ic:'mushroom',kcal:28,c:5.3,p:2.2,f:0.5,pufa:0.16,std:100,step:25,mod:true,ex:[]},
+{id:'squash',n:'Cooked squash (peeled)',cat:'carb',ic:'squash',kcal:45,c:10.0,p:1.0,f:0.1,pufa:0.05,std:150,step:25,ex:[]},
 {id:'icecream',n:'Vanilla ice cream',cat:'carb',ic:'icecream',kcal:207,c:23.6,p:3.5,f:11.0,pufa:0.45,std:100,step:10,ex:['dairy']},
 {id:'cocoa',n:'Cocoa powder',cat:'carb',ic:'cocoa',kcal:228,c:57.9,p:19.6,f:13.7,pufa:0.44,std:5,step:1,ex:['caffeine']},
-{id:'cottage',n:'Cottage cheese',cat:'prot',ic:'cottage',kcal:98,c:3.4,p:11.1,f:4.3,pufa:0.12,std:200,step:25,ex:['dairy']},
-{id:'cheese',n:'Hard cheese / kaşar',cat:'prot',ic:'cheese',kcal:402,c:1.3,p:25.0,f:33.1,pufa:0.90,std:40,step:5,ex:['dairy']},
-{id:'feta',n:'White cheese / feta',cat:'prot',ic:'feta',kcal:264,c:4.1,p:14.2,f:21.3,pufa:0.60,std:40,step:10,ex:['dairy']},
-{id:'yogurt',n:'Plain yogurt',cat:'prot',ic:'yogurt',kcal:61,c:4.7,p:3.5,f:3.3,pufa:0.10,std:200,step:25,ex:['dairy']},
+{id:'cheese',n:'Kaşar cheese',cat:'prot',ic:'cheese',kcal:356,c:1.5,p:26.5,f:27.0,pufa:0.75,std:40,step:5,ex:['dairy']},
+{id:'feta',n:'White cheese / Feta',cat:'prot',ic:'feta',kcal:264,c:4.1,p:14.2,f:21.3,pufa:0.60,std:40,step:10,ex:['dairy']},
+{id:'tulum',n:'Bergama Tulum cheese',cat:'prot',ic:'tulum',kcal:372,c:1.2,p:24.5,f:30.0,pufa:0.85,std:40,step:5,ex:['dairy']},
+{id:'cottage',n:'Cottage cheese (12% fat)',cat:'prot',ic:'cottage',kcal:156,c:3.2,p:11.0,f:12.0,pufa:0.35,std:150,step:25,hidden:true,ex:['dairy']},
+{id:'cottage12',n:'Cottage cheese (12% fat)',cat:'prot',ic:'cottage',kcal:156,c:3.2,p:11.0,f:12.0,pufa:0.35,std:150,step:25,ex:['dairy']},
+{id:'cottage2',n:'Cottage cheese (2% low fat)',cat:'prot',ic:'cottage2',kcal:84,c:3.6,p:11.5,f:2.0,pufa:0.06,std:200,step:25,ex:['dairy']},
+{id:'yogurt',n:'Plain yogurt',cat:'prot',ic:'yogurt',kcal:61,c:4.7,p:3.5,f:3.3,pufa:0.09,std:200,step:25,ex:['dairy']},
 {id:'gelatin',n:'Gelatin / collagen',cat:'prot',ic:'gelatin',kcal:335,c:0.0,p:85.0,f:0.0,pufa:0.00,std:15,step:5,ex:[]},
-{id:'egg',n:'Boiled egg (Medium)',cat:'prot',ic:'egg_med',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:100,step:1,unit:'egg',eggG:50,hidden:true,ex:['egg']},
-{id:'egglarge',n:'Boiled egg (Large)',cat:'prot',ic:'egg',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:120,step:1,unit:'egg',eggG:60,ex:['egg']},
-{id:'eggmedium',n:'Boiled egg (Medium)',cat:'prot',ic:'egg_med',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.40,std:100,step:1,unit:'egg',eggG:50,ex:['egg']},
-{id:'friedegglarge',n:'Fried egg (Large, +2.5g butter)',cat:'prot',ic:'friedegg',kcal:177.5,c:1.06,p:12.13,f:13.42,pufa:1.46,std:125,step:1,unit:'egg',eggG:62.5,butterPerEgg:2.5,ex:['egg','dairy']},
-{id:'friedeggmedium',n:'Fried egg (Medium, +2.5g butter)',cat:'prot',ic:'friedegg_med',kcal:181.8,c:1.05,p:12.04,f:13.96,pufa:1.48,std:105,step:1,unit:'egg',eggG:52.5,butterPerEgg:2.5,ex:['egg','dairy']},
-{id:'shrimp',n:'Shrimp',cat:'prot',ic:'shrimp',kcal:99,c:0.2,p:24.0,f:0.3,pufa:0.10,std:150,step:25,ex:['shellfish']},
-{id:'oyster',n:'Oysters',cat:'prot',ic:'oyster',kcal:81,c:4.9,p:9.0,f:2.3,pufa:0.20,std:120,step:20,ex:['shellfish']},
-{id:'beef',n:'Lean beef / diced',cat:'prot',ic:'beef',kcal:170,c:0.0,p:26.0,f:7.0,pufa:0.30,std:150,step:25,ex:['beef']},
-{id:'mince',n:'Beef mince',cat:'prot',ic:'mince',kcal:215,c:0.0,p:24.0,f:13.0,pufa:0.50,std:150,step:25,ex:['beef']},
-{id:'lambshank',n:'Lamb shank',cat:'prot',ic:'lambshank',kcal:180,c:0.0,p:20.0,f:11.0,pufa:0.80,std:180,step:25,ex:['beef']},
-{id:'lamb',n:'Lamb meat',cat:'prot',ic:'lamb',kcal:244,c:0.0,p:25.0,f:16.0,pufa:1.10,std:150,step:25,ex:['beef']},
-{id:'chicken',n:'Chicken breast (skinless)',cat:'prot',ic:'chicken',kcal:160,c:0.0,p:31.0,f:3.6,pufa:0.70,std:150,step:25,mod:true,ex:[]},
-{id:'liver',n:'Beef liver (weekly)',cat:'prot',ic:'liver',kcal:135,c:3.9,p:20.4,f:3.6,pufa:0.50,std:100,step:25,ex:['beef']},
-{id:'cod',n:'Cod (lean white fish)',cat:'prot',ic:'whitefish',kcal:82,c:0.0,p:18.0,f:0.7,pufa:0.20,std:150,step:25,ex:['fish']},
-{id:'otherfish',n:'Other fish (5% fat)',cat:'prot',ic:'otherfish',kcal:125,c:0.0,p:20.0,f:5.0,pufa:1.00,std:150,step:25,mod:true,ex:['fish']},
-{id:'butter',n:'Butter / ghee',cat:'other',ic:'butter',kcal:717,c:0.1,p:0.9,f:81.1,pufa:3.00,std:10,step:5,ex:['dairy']},
+{id:'egg',n:'Boiled egg (Large, peeled)',cat:'prot',ic:'egg',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.36,std:100,step:1,unit:'egg',eggG:50,hidden:true,ex:['egg']},
+{id:'egglarge',n:'Boiled egg (Large, 50g peeled)',cat:'prot',ic:'egg',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.36,std:100,step:1,unit:'egg',eggG:50,ex:['egg']},
+{id:'eggmedium',n:'Boiled egg (Medium, 44g peeled)',cat:'prot',ic:'egg_med',kcal:155,c:1.1,p:12.6,f:10.6,pufa:1.36,std:88,step:1,unit:'egg',eggG:44,ex:['egg']},
+{id:'friedegglarge',n:'Fried egg (Large, +2.5g butter)',cat:'prot',ic:'friedegg',kcal:181.8,c:1.05,p:12.04,f:13.96,pufa:1.44,std:105,step:1,unit:'egg',eggG:52.5,butterPerEgg:2.5,ex:['egg','dairy']},
+{id:'friedeggmedium',n:'Fried egg (Medium, +2.5g butter)',cat:'prot',ic:'friedegg_med',kcal:185.2,c:1.05,p:11.97,f:14.39,pufa:1.45,std:93,step:1,unit:'egg',eggG:46.5,butterPerEgg:2.5,ex:['egg','dairy']},
+{id:'shrimp',n:'Shrimp (cooked, peeled)',cat:'prot',ic:'shrimp',kcal:99,c:0.2,p:24.0,f:0.3,pufa:0.11,std:150,step:25,ex:['shellfish']},
+{id:'oyster',n:'Oysters (raw, shucked)',cat:'prot',ic:'oyster',kcal:81,c:4.9,p:9.0,f:2.3,pufa:0.50,std:120,step:20,ex:['shellfish']},
+{id:'beef',n:'Lean beef / diced (raw)',cat:'prot',ic:'beef',kcal:155,c:0.0,p:21.5,f:7.0,pufa:0.30,std:180,step:25,ex:['beef']},
+{id:'mince',n:'Beef mince (raw)',cat:'prot',ic:'mince',kcal:205,c:0.0,p:19.5,f:13.5,pufa:0.50,std:180,step:25,ex:['beef']},
+{id:'lambshank',n:'Lamb shank (raw, boneless)',cat:'prot',ic:'lambshank',kcal:165,c:0.0,p:19.5,f:9.5,pufa:0.75,std:200,step:25,ex:['beef']},
+{id:'lamb',n:'Lamb meat (raw)',cat:'prot',ic:'lamb',kcal:225,c:0.0,p:19.0,f:16.0,pufa:1.05,std:180,step:25,ex:['beef']},
+{id:'chicken',n:'Chicken breast skinless (raw)',cat:'prot',ic:'chicken',kcal:120,c:0.0,p:22.5,f:2.6,pufa:0.55,std:180,step:25,mod:true,ex:[]},
+{id:'liver',n:'Beef liver (raw, weekly)',cat:'prot',ic:'liver',kcal:135,c:3.9,p:20.4,f:3.6,pufa:0.47,std:100,step:25,ex:['beef']},
+{id:'cod',n:'Cod (raw)',cat:'prot',ic:'whitefish',kcal:82,c:0.0,p:18.0,f:0.7,pufa:0.23,std:200,step:25,ex:['fish']},
+{id:'otherfish',n:'Other fish (5% fat, raw)',cat:'prot',ic:'otherfish',kcal:125,c:0.0,p:20.0,f:5.0,pufa:1.00,std:180,step:25,mod:true,ex:['fish']},
+{id:'butter',n:'Butter / ghee',cat:'other',ic:'butter',kcal:717,c:0.1,p:0.9,f:81.1,pufa:3.04,std:10,step:5,ex:['dairy']},
 {id:'coconut',n:'Coconut oil',cat:'other',ic:'coconut',kcal:892,c:0.0,p:0.0,f:99.1,pufa:1.70,std:10,step:5,ex:[]},
 {id:'oliveoil',n:'Olive oil (extra virgin)',cat:'other',ic:'oliveoil',kcal:884,c:0.0,p:0.0,f:100.0,pufa:10.5,std:10,step:5,mod:true,ex:[]}
 ];
 const FMAP={};FOODS.forEach(f=>FMAP[f.id]=f);
+// Backward compatibility aliases
+FMAP.egg_l=FMAP.egglarge;
+FMAP.egg_m=FMAP.eggmedium;
 const CATS=[
-{k:'carb',t:'Carbohydrates',cap:'Fruit, honey, starch, breads, vegetables — the metabolic base.'},
-{k:'prot',t:'Proteins',cap:'Dairy, gelatin, shellfish, lean ruminant, eggs, poultry, fish. Balance muscle meats with gelatin.'},
+{k:'carb',t:'Carbohydrates',cap:'Net peeled/trimmed weight — fruit, honey, starch, breads, vegetables.'},
+{k:'prot',t:'Proteins',cap:'Cheeses, gelatin, shellfish, raw ruminant/poultry/fish, peeled eggs. Balance muscle meats with gelatin.'},
 {k:'other',t:'Other optional essentials',cap:'Cooking fats — saturated first; olive oil is mostly MUFA but carries PUFA.'}
 ];
 const SWEET=new Set(['honey','sugar']);
@@ -527,91 +529,91 @@ honey:{el:'amtHoney',on:'onHoney',food:'honey',def:15,min:0,max:40,step:5},
 gelatin:{el:'amtGel',on:'onGel',food:'gelatin',def:10,min:0,max:20,step:5},
 coconut:{el:'amtCoco',on:'onCoco',food:'coconut',def:5,min:0,max:15,step:1}};
 
-/* ---------- MEAL LIBRARY (from the uploaded plan, PUFA-reduced) ---------- */
+/* ---------- MEAL LIBRARY (from the uploaded plan, PUFA-reduced, net weights) ---------- */
 const MEALS=[
 {slot:'Breakfast',id:'b1',n:'Egg & cheese plate',pdf:500,
- it:[['eggmedium',50],['feta',40],['cheese',30],['sourdough',80],['oj',250],['honey',10]],
- m:'Boil the egg. Serve with both cheeses, bread and honey; drink the juice alongside.'},
+ it:[['egglarge',50],['feta',40],['cheese',30],['sourdough',80],['oj',250],['honey',10]],
+ m:'Boil 1 large egg (50 g peeled). Serve with both cheeses, bread and honey; drink the juice alongside.'},
 {slot:'Breakfast',id:'b2',n:'Tomato omelette',pdf:565,
- it:[['eggmedium',50],['tomato',150],['butter',5],['cheese',30],['sourdough',80],['oj',200]],
- m:'Soften the tomato in butter, add beaten egg, cook through. Serve with bread and juice.'},
+ it:[['egglarge',50],['tomato',150],['butter',5],['cheese',30],['sourdough',80],['oj',200]],
+ m:'Soften the tomato in butter, add beaten egg (50 g net), cook through. Serve with bread and juice.'},
 {slot:'Breakfast',id:'b3',n:'Apple milk rice porridge',pdf:445,
  it:[['rice_dry',45],['milk',250],['apple',150],['honey',10]],
- m:'Simmer rice in milk until soft. Stir in grated apple, then honey off the heat. (Oats swapped for rice to cut PUFA.)'},
+ m:'Simmer rice in milk until soft. Stir in grated cored apple (150 g net), then honey off the heat.'},
 {slot:'Breakfast',id:'b4',n:'Cheese omelette',pdf:390,
- it:[['eggmedium',50],['cheese',30],['butter',5],['tomato',150],['sourdough',60],['oj',200]],
- m:'Beat egg with cheese, cook in butter, finish with tomato. Bread and juice alongside.'},
+ it:[['egglarge',50],['cheese',30],['butter',5],['tomato',150],['sourdough',60],['oj',200]],
+ m:'Beat egg (50 g net) with cheese, cook in butter, finish with tomato. Bread and juice alongside.'},
 {slot:'Breakfast',id:'b5',n:'Boiled egg plate',pdf:440,
- it:[['eggmedium',50],['cheese',40],['orange',180],['tomato',150],['cucumber',150],['sourdough',60],['honey',10]],
- m:'Boil the egg. Serve with cheese, peeled orange, sliced vegetables and bread.'},
+ it:[['egglarge',50],['cheese',40],['orange',180],['tomato',150],['cucumber',150],['sourdough',60],['honey',10]],
+ m:'Boil the egg (50 g peeled). Serve with cheese, peeled orange (180 g net), sliced vegetables and bread.'},
 {slot:'Breakfast',id:'b6',n:'Honey French toast',pdf:395,
- it:[['eggmedium',50],['milk',100],['sourdough',80],['butter',5],['honey',10]],
+ it:[['egglarge',50],['milk',100],['sourdough',80],['butter',5],['honey',10]],
  m:'Dip bread in the egg-milk mix, fry both sides in butter, drizzle honey.'},
 {slot:'Breakfast',id:'b7',n:'Cheese menemen',pdf:465,
- it:[['eggmedium',50],['tomato',200],['feta',40],['butter',5],['sourdough',80],['oj',200]],
- m:'Soften tomato in butter, add egg and white cheese, cook. Serve with bread.'},
+ it:[['egglarge',50],['tomato',200],['feta',40],['butter',5],['sourdough',80],['oj',200]],
+ m:'Soften tomato in butter, add egg (50 g net) and white cheese, cook. Serve with bread.'},
 {slot:'Lunch',id:'l1',n:'Yogurt potato & carrot',pdf:405,
  it:[['potato',250],['yogurt',200],['carrot',100],['coconut',5]],
- m:'Boil potato, mix with yogurt. Grate the carrot, dress with coconut oil. (Olive oil swapped for coconut.)'},
+ m:'Boil peeled potato (250 g net), mix with yogurt. Grate peeled carrot, dress with coconut oil.'},
 {slot:'Lunch',id:'l2',n:'Cheese rice bowl',pdf:465,
  it:[['rice_dry',60],['feta',60],['cucumber',150],['carrot',100],['coconut',5]],
- m:'Cook the rice. Add cheese and chopped vegetables, drizzle coconut oil.'},
+ m:'Cook the rice. Add cheese and chopped net vegetables, drizzle coconut oil.'},
 {slot:'Lunch',id:'l3',n:'Potato egg salad',pdf:415,
- it:[['eggmedium',50],['potato',250],['yogurt',150],['cucumber',150],['honey',10]],
- m:'Boil potato and egg, chop, mix with yogurt and cucumber.'},
+ it:[['egglarge',50],['potato',250],['yogurt',150],['cucumber',150],['honey',10]],
+ m:'Boil peeled potato and egg (50 g peeled), chop, mix with yogurt and cucumber.'},
 {slot:'Lunch',id:'l4',n:'Milk & juice',pdf:525,
  it:[['milk',500],['oj',500]],
  m:'Spread both drinks across the day rather than taking them together.'},
 {slot:'Lunch',id:'l5',n:'Beef on mash',pdf:820,
- it:[['beef',180],['potato',300],['carrot',150],['butter',10],['yufka',60]],
- m:'Boil potatoes, mash with butter. Top with cooked beef and carrot; serve flatbread alongside.'},
+ it:[['beef',220],['potato',300],['carrot',150],['butter',10],['yufka',60]],
+ m:'Boil peeled potatoes (300 g net), mash with butter. Top with cooked beef (220 g raw weight) and carrot; serve flatbread alongside.'},
 {slot:'Lunch',id:'l6',n:'Milk & fruit',pdf:500,
  it:[['milk',500],['orange',300]],
- m:'Two fruit servings — or swap the fruit for 300 g orange juice. Spread through the day.'},
+ m:'300 g peeled orange flesh — or swap the fruit for 300 g orange juice. Spread through the day.'},
 {slot:'Lunch',id:'l7',n:'Chicken noodle soup',pdf:505,
- it:[['chicken',120],['vermicelli',40],['carrot',100],['butter',5],['yogurt',150],['gelatin',18]],
- m:'Poach and shred chicken, add noodles and carrot, simmer. Stir in gelatin, then yogurt off the heat.'},
+ it:[['chicken',150],['vermicelli',40],['carrot',100],['butter',5],['yogurt',150],['gelatin',18]],
+ m:'Poach and shred chicken (150 g raw weight), add noodles and peeled carrot, simmer. Stir in gelatin, then yogurt off the heat.'},
 {slot:'Snack',id:'s1',n:'Honey milk & kiwi',pdf:230,
  it:[['milk',200],['honey',10],['kiwi',150]],
- m:'Stir honey into warm milk. Peel and slice the two kiwis alongside.'},
+ m:'Stir honey into warm milk. Serve with 150 g peeled sliced kiwi.'},
 {slot:'Snack',id:'s2',n:'Banana yogurt',pdf:225,
- it:[['yogurt',200],['banana',120]],m:'Slice banana into the yogurt.'},
+ it:[['yogurt',200],['banana',120]],m:'Slice 120 g peeled banana into the yogurt.'},
 {slot:'Snack',id:'s3',n:'Cheese & grapes',pdf:240,
- it:[['cheese',40],['grapes',150]],m:'Wash grapes, serve with sliced cheese.'},
+ it:[['cheese',40],['grapes',150]],m:'Wash seedless grapes (150 g net), serve with sliced kaşar cheese.'},
 {slot:'Snack',id:'s4',n:'Honey milk & pear',pdf:235,
  it:[['milk',200],['honey',10],['pear',150]],
- m:'Stir honey into warm milk. Poach the pear, slice and serve.'},
+ m:'Stir honey into warm milk. Poach 150 g peeled/cored pear, slice and serve.'},
 {slot:'Snack',id:'s5',n:'Cocoa banana milk',pdf:235,
- it:[['milk',200],['banana',120],['cocoa',5]],m:'Blend milk, banana and raw cocoa until smooth.'},
+ it:[['milk',200],['banana',120],['cocoa',5]],m:'Blend milk, 120 g peeled banana and raw cocoa until smooth.'},
 {slot:'Snack',id:'s6',n:'Fruit & cheese plate',pdf:290,
- it:[['apple',150],['cheese',50]],m:'Slice everything and eat slowly.'},
+ it:[['apple',150],['cheese',50]],m:'Slice 150 g cored apple and kaşar cheese; eat slowly.'},
 {slot:'Snack',id:'s7',n:'Milk & cheese plate',pdf:300,
  it:[['milk',250],['cheese',40],['honey',10]],
- m:'A glass of milk with cheese and honey. (Almonds swapped for cheese — a handful carries ~3.2 g PUFA.)'},
+ m:'A glass of milk with kaşar cheese and honey.'},
 {slot:'Snack',id:'s8',n:'Rice pudding',pdf:null,
  it:[['milk',200],['sugar',25],['rice_dry',25]],
  m:'Simmer 25 g dry rice in 200 ml milk until creamy and thick, stir in the sugar. Serve warm or chilled.'},
 {slot:'Dinner',id:'d1',n:'Beef & vegetable pot',pdf:580,
- it:[['beef',150],['potato',200],['squash',150],['onion',50],['butter',10]],
- m:'Brown the beef, add onion and hot water, soften. Add potato and squash, cook through.'},
+ it:[['beef',180],['potato',200],['squash',150],['onion',50],['butter',10]],
+ m:'Brown the beef (180 g raw), add peeled onion and hot water, soften. Add peeled potato and squash, cook through.'},
 {slot:'Dinner',id:'d2',n:'Baked white fish',pdf:570,
  it:[['cod',220],['potato',250],['squash',200],['butter',12]],
- m:'Slice potato thin, roast with butter at 200 °C for 20 min. Add fish and squash, bake until opaque. (Trout swapped for cod to cut PUFA.)'},
+ m:'Slice peeled potato thin, roast with butter at 200 °C for 20 min. Add raw cod (220 g net) and peeled squash, bake until opaque.'},
 {slot:'Dinner',id:'d3',n:'Chicken rice',pdf:590,
- it:[['chicken',150],['rice_dry',60],['carrot',100],['butter',8],['gelatin',10],['oj',250]],
- m:'Dice chicken and carrot, turn in butter. Add rice and hot water, cover until cooked. Juice alongside.'},
+ it:[['chicken',180],['rice_dry',60],['carrot',100],['butter',8],['gelatin',10],['oj',250]],
+ m:'Dice chicken (180 g raw) and peeled carrot, turn in butter. Add rice and hot water, cover until cooked. Juice alongside.'},
 {slot:'Dinner',id:'d4',n:'Mince squash & rice',pdf:725,
- it:[['mince',150],['squash',250],['tomato',150],['rice_dry',60],['butter',10]],
- m:'Cook mince in butter, add squash, tomato and a little water. Serve over separate rice.'},
+ it:[['mince',180],['squash',250],['tomato',150],['rice_dry',60],['butter',10]],
+ m:'Cook raw mince (180 g) in butter, add peeled squash, tomato and a little water. Serve over separate rice.'},
 {slot:'Dinner',id:'d5',n:'Baked chicken & potato',pdf:620,
- it:[['chicken',160],['potato',280],['carrot',150],['butter',8]],
- m:'Chop everything into a dish with butter and a splash of water. Bake at 190 °C until the chicken is done.'},
+ it:[['chicken',200],['potato',280],['carrot',150],['butter',8]],
+ m:'Chop raw chicken (200 g) and peeled vegetables into a dish with butter and a splash of water. Bake at 190 °C until done.'},
 {slot:'Dinner',id:'d6',n:'Grilled meatballs & rice',pdf:710,
- it:[['mince',150],['onion',50],['rice_dry',60],['squash',200],['butter',10]],
- m:'Knead mince with grated onion, grill the meatballs. Boil rice, sauté squash in butter.'},
+ it:[['mince',180],['onion',50],['rice_dry',60],['squash',200],['butter',10]],
+ m:'Knead raw mince (180 g) with grated onion, grill the meatballs. Boil rice, sauté peeled squash in butter.'},
 {slot:'Dinner',id:'d7',n:'Beef potato stew',pdf:620,
- it:[['beef',150],['potato',250],['tomato',150],['onion',50],['butter',10]],
- m:'Brown beef, add onion and water, soften. Add potato and tomato, cook through.'}
+ it:[['beef',180],['potato',250],['tomato',150],['onion',50],['butter',10]],
+ m:'Brown raw beef (180 g), add peeled onion and water, soften. Add peeled potato and tomato, cook through.'}
 ];
 const SLOTS=['Breakfast','Lunch','Snack','Dinner'];
 
@@ -760,27 +762,27 @@ S.goal=b.dataset.g;update();});
 function computeTargets(){
 if(!(S.age&&S.gender&&S.height&&S.weight&&S.act&&S.goal))return null;
 const bmr=10*S.weight+6.25*S.height-5*S.age+(S.gender==='male'?5:-161);
-let kcal=bmr*S.act;
-if(S.goal==='loss')kcal*=0.85;
-if(S.goal==='gain')kcal*=1.12;
-kcal=Math.max(kcal,S.gender==='male'?1600:1400);
-const prot=round(1.8*S.weight),carbKcal=kcal*0.53,carb=round(carbKcal/4);
-const fat=Math.max(25,round((kcal-carbKcal-prot*4)/9));
+const rawKcal=bmr*S.act*(S.goal==='loss'?0.85:(S.goal==='gain'?1.12:1));
+const minFloor=S.gender==='male'?1600:1400;
+const floorHit=rawKcal<minFloor;
+const kcal=round(Math.max(rawKcal,minFloor));
+const prot=round(1.8*S.weight);
+const protKcal=prot*4;
+let carb=round((kcal*0.53)/4);
+let fat=round((kcal-carb*4-protKcal)/9);
+let fatFloorHit=false;
+if(fat<25){
+fat=25;
+fatFloorHit=true;
+carb=Math.max(50,round((kcal-protKcal-fat*9)/4));
+}
+// Reconcile carb by ±1g if rounding leaves >4 kcal discrepancy with kcal
+const macroKcal=carb*4+protKcal+fat*9;
+if(Math.abs(kcal-macroKcal)>=4){
+carb=Math.max(50,carb+Math.round((kcal-macroKcal)/4));
+}
 const pufaCap=Math.max(2,round(kcal*0.02/9,1));
-return {bmr:round(bmr),kcal:round(kcal),carb,prot,fat,pufaCap};}
-
-/* ---------- ROW 4 : meal library ---------- */
-function mealItems(meal){return meal.it.map(([id,g])=>FMAP[id]?makeItem(FMAP[id],g):null).filter(Boolean);}
-function renderMeals(){
-$('mealLibrary').innerHTML=SLOTS.map(slot=>{
-const cards=MEALS.filter(m=>m.slot===slot).map(m=>{
-const items=mealItems(m),t=totalsOf(items);
-const missing=m.it.filter(([id])=>!FMAP[id]||blocked(FMAP[id])).map(([id])=>FMAP[id]?FMAP[id].n:id);
-const off=missing.length?' style="opacity:.45"':'';
-const btn=missing.length?'':'<button class="qadd" data-meal="'+m.id+'" title="Add to today\'s entries">+</button>';
-const list=m.it.map(([id,g])=>{const f=FMAP[id];if(!f)return id;
-return (f.unit==='egg'?Math.round(g/(f.eggG||50))+' egg'+(Math.round(g/(f.eggG||50))>1?'s':''):g+' g')+' '+f.n.toLowerCase();}).join(' · ');
-const pdfTxt=m.pdf?('<span> · plan '+m.pdf+'</span>'):'';
+return {bmr:round(bmr),kcal,carb,prot,fat,pufaCap,floorHit,minFloor,fatFloorHit};}
 const warn=missing.length?'<div class="hint" style="color:var(--warn);margin-top:4px">Excluded: '+missing.join(', ')+'</div>':'';
 return '<div class="meal"'+off+'>'+btn+'<div class="mn">'+m.n+'</div>'+
 '<div class="mi">'+list+'</div>'+
@@ -827,7 +829,7 @@ if(w.length)askConfirm('Add '+f.n+' on its own?','You can add anything — these
 else commit();}
 $('clearSel').onclick=()=>{S.sel.clear();renderLibrary();renderDrinks();update();};
 $('auto').onclick=()=>{
-const pref=['oj','milk','potato','rice','carrotsalad','mango','honey','cottage','egglarge','shrimp','gelatin','butter','coconut'];
+const pref=['oj','milk','potato','rice','carrotsalad','mango','honey','cottage12','egglarge','shrimp','gelatin','butter','coconut'];
 S.sel.clear();
 pref.forEach(id=>{const f=FMAP[id];if(f&&!f.mod&&!blocked(f))S.sel.add(id);});
 renderLibrary();renderDrinks();update();};
@@ -919,7 +921,7 @@ return bn;}
 function dishName(list){
 const c1=list.find(i=>i.f.cat==='carb'&&!SMALL.has(i.f.id)),p1=list.find(i=>i.f.cat==='prot'&&i.f.id!=='gelatin');
 const adj={orange:'Orchard',mango:'Sunripe',kiwi:'Emerald',apple:'Orchard',pear:'Poached Pear',banana:'Golden',melon:'Cool',grapes:'Vine',berries:'Ruby',potato:'Hearth',rice:'Paddy',rice_dry:'Paddy',sourdough:'Sourdough',yufka:'Flatbread',carrot:'Root',carrotsalad:'Shredded Carrot',mushroom:'Woodland',squash:'Amber',icecream:'Frozen'};
-const dish={cottage:'Cottage Bowl',cheese:'Cheese Plate',feta:'White Cheese Plate',yogurt:'Yogurt Bowl',gelatin:'Gelatin Cream',egg:'Egg Plate',egglarge:'Egg Plate',eggmedium:'Egg Plate',friedegglarge:'Fried Egg Plate',friedeggmedium:'Fried Egg Plate',shrimp:'Shrimp Skillet',oyster:'Oyster Plate',beef:'Beef Plate',mince:'Meatball Plate',lambshank:'Lamb Shank Plate',lamb:'Lamb Plate',chicken:'Chicken Plate',liver:'Liver & Onion',cod:'Cod Plate',otherfish:'Fish Plate'};
+const dish={cottage:'Cottage Bowl',cottage12:'Cottage Bowl',cottage2:'Low-Fat Cottage Bowl',cheese:'Kaşar Plate',feta:'White Cheese Plate',tulum:'Tulum Cheese Plate',yogurt:'Yogurt Bowl',gelatin:'Gelatin Cream',egg:'Egg Plate',egglarge:'Egg Plate',eggmedium:'Egg Plate',friedegglarge:'Fried Egg Plate',friedeggmedium:'Fried Egg Plate',shrimp:'Shrimp Skillet',oyster:'Oyster Plate',beef:'Beef Plate',mince:'Meatball Plate',lambshank:'Lamb Shank Plate',lamb:'Lamb Plate',chicken:'Chicken Plate',liver:'Liver & Onion',cod:'Cod Plate',otherfish:'Fish Plate'};
 return (adj[c1?c1.f.id:'']||'Simple')+' '+(dish[p1?p1.f.id:'']||'Plate');}
 function pushRecipe(list,kind,name,slot){
 const nm=name||(kind==='drink'?drinkName(list):dishName(list));
@@ -1033,17 +1035,17 @@ if(has('yufka'))steps.push('Serve '+g('yufka')+' g flatbread alongside.');
 if(has('vermicelli'))steps.push('Add '+g('vermicelli')+' g vermicelli to simmering stock and cook until tender.');
 if(has('oats'))steps.push('Simmer '+g('oats')+' g oats in milk or water until soft.');
 if(has('carrotsalad'))steps.push('Shred enough raw carrot for '+g('carrotsalad')+' g salad; dress with vinegar, coconut oil and salt.');
-if(has('mushroom'))steps.push('Slice '+g('mushroom')+' g mushrooms and cook thoroughly in butter or coconut oil.');
-if(has('beef'))steps.push('Brown '+g('beef')+' g diced beef, add water and simmer until tender.');
-if(has('mince'))steps.push('Cook '+g('mince')+' g mince in butter — as a sauce or shaped into meatballs.');
-if(has('lambshank'))steps.push('Braise '+g('lambshank')+' g lamb shank slowly in salted water or broth until fall-off-the-bone tender (rich in natural gelatin).');
-if(has('lamb'))steps.push('Sear or slow-cook '+g('lamb')+' g lamb meat; pair with gelatin or broth to balance amino acids.');
-if(has('chicken'))steps.push('Poach or gently sear '+g('chicken')+' g chicken breast; pair with gelatin to balance the amino acids.');
-if(has('liver'))steps.push('Slice '+g('liver')+' g liver thin and sear briefly (once weekly at most).');
-if(has('shrimp'))steps.push('Poach or quick-sear '+g('shrimp')+' g shrimp for 2–3 minutes.');
-if(has('oyster'))steps.push('Warm '+g('oyster')+' g oysters gently in their liquor.');
-if(has('cod'))steps.push('Bake or steam '+g('cod')+' g cod until just opaque.');
-if(has('otherfish'))steps.push('Bake, poach or pan-cook '+g('otherfish')+' g fish (5% fat) gently until flaky.');
+if(has('mushroom'))steps.push('Slice '+g('mushroom')+' g trimmed mushrooms and cook thoroughly in butter or coconut oil.');
+if(has('beef'))steps.push('Brown '+g('beef')+' g raw diced beef, add water and simmer until tender.');
+if(has('mince'))steps.push('Cook '+g('mince')+' g raw mince in butter — as a sauce or shaped into meatballs.');
+if(has('lambshank'))steps.push('Braise '+g('lambshank')+' g raw boneless lamb shank slowly in salted water or broth until tender (rich in natural gelatin).');
+if(has('lamb'))steps.push('Sear or slow-cook '+g('lamb')+' g raw lamb meat; pair with gelatin or broth to balance amino acids.');
+if(has('chicken'))steps.push('Poach or gently sear '+g('chicken')+' g raw chicken breast; pair with gelatin to balance the amino acids.');
+if(has('liver'))steps.push('Slice '+g('liver')+' g raw liver thin and sear briefly (once weekly at most).');
+if(has('shrimp'))steps.push('Weigh '+g('shrimp')+' g cooked peeled shrimp (or quick-sear raw shrimp for 2–3 minutes).');
+if(has('oyster'))steps.push('Warm '+g('oyster')+' g shucked oysters gently in their liquor.');
+if(has('cod'))steps.push('Bake or steam '+g('cod')+' g raw cod until just opaque.');
+if(has('otherfish'))steps.push('Bake, poach or pan-cook '+g('otherfish')+' g raw fish (5% fat) gently until flaky.');
 items.filter(i=>i.f.unit==='egg').forEach(it=>{
 if(it.f.butterPerEgg){
 const bTot=round(it.n*it.f.butterPerEgg,1);
@@ -1060,9 +1062,11 @@ if(has('cucumber'))steps.push('Slice '+g('cucumber')+' g cucumber fresh on the s
 if(has('butter'))steps.push('Use '+g('butter')+' g butter for cooking or finishing.');
 if(has('coconut'))steps.push('Use '+g('coconut')+' g coconut oil (stable, low PUFA).');
 if(has('oliveoil'))steps.push('Drizzle '+g('oliveoil')+' g olive oil over the finished plate — do not heat it hard.');
-if(has('cheese'))steps.push('Serve '+g('cheese')+' g hard cheese alongside.');
-if(has('feta'))steps.push('Crumble or slice '+g('feta')+' g white cheese over the plate.');
-if(has('cottage'))steps.push('Spoon '+g('cottage')+' g cottage cheese on the side.');
+if(has('cheese'))steps.push('Serve '+g('cheese')+' g kaşar cheese alongside.');
+if(has('feta'))steps.push('Crumble or slice '+g('feta')+' g white cheese / feta over the plate.');
+if(has('tulum'))steps.push('Serve '+g('tulum')+' g Bergama Tulum cheese alongside.');
+if(has('cottage')||has('cottage12'))steps.push('Spoon '+(g('cottage')||g('cottage12'))+' g cottage cheese (12% fat) on the side.');
+if(has('cottage2'))steps.push('Spoon '+g('cottage2')+' g low-fat cottage cheese (2% fat) on the side.');
 if(has('yogurt'))steps.push('Stir in or serve '+g('yogurt')+' g plain yogurt (off the heat).');
 if(has('gelatin'))steps.push('Bloom '+g('gelatin')+' g gelatin in cold liquid, dissolve into the warm dish.');
 if(has('honey'))steps.push('Drizzle '+g('honey')+' g honey over the fruit or dairy.');
@@ -1240,10 +1244,11 @@ $('calcMsg').textContent='Still needed: '+missing.join(', ')+'.';
 $('split').innerHTML='';$('pufalimit').textContent=' — targets appear once rows 1 and 2 are complete; you can still add meals.';
 }else{
 $('kcal').textContent=T.kcal;
-$('kcalsub').textContent='kcal/day · BMR '+T.bmr+' × '+S.act+(S.goal==='loss'?' × 0.85':S.goal==='gain'?' × 1.12':'');
-$('cg').textContent=T.carb;$('cs').textContent='g · '+round(T.carb*4/T.kcal*100)+'% of energy';
+const floorNote=T.floorHit?(' · '+T.minFloor+' kcal floor applied'):'';
+$('kcalsub').textContent='kcal/day · BMR '+T.bmr+' × '+S.act+(S.goal==='loss'?' × 0.85':S.goal==='gain'?' × 1.12':'')+floorNote;
+$('cg').textContent=T.carb;$('cs').textContent='g · '+round(T.carb*4/T.kcal*100)+'% of energy'+(T.fatFloorHit?' (adjusted for 25g fat floor)':'');
 $('pg').textContent=T.prot;$('ps').textContent='g · 1.8 g/kg · '+round(T.prot*4/T.kcal*100)+'%';
-$('fg').textContent=T.fat;$('fs').textContent='g · '+round(T.fat*9/T.kcal*100)+'% · keep mostly saturated';
+$('fg').textContent=T.fat;$('fs').textContent='g · '+round(T.fat*9/T.kcal*100)+'% · '+(T.fatFloorHit?'25 g min floor':'keep mostly saturated');
 const pc=T.carb*4/T.kcal*100,pp=T.prot*4/T.kcal*100,pf=Math.max(0,100-pc-pp);
 $('split').innerHTML='<i style="width:'+pc+'%;background:var(--carb)"></i><i style="width:'+pp+'%;background:var(--prot)"></i><i style="width:'+pf+'%;background:var(--fat)"></i>';
 $('pufalimit').textContent=' — keep polyunsaturated fat at or below '+T.pufaCap+' g/day (≈2% of energy).';}
