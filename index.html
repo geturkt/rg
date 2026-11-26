@@ -432,6 +432,11 @@ coconut:'<circle cx="22" cy="24" r="14" fill="#8a6a4a"/><circle cx="22" cy="24" 
 oliveoil:'<path d="M18 12h8v6l4 6v14a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3V24l4-6z" fill="#dfe7c8" stroke="#b9c49a"/><path d="M15 27h14v11a2 2 0 0 1-2 2H17a2 2 0 0 1-2-2z" fill="#b7a53a"/><rect x="18" y="8" width="8" height="5" rx="1.5" fill="#8a7a3a"/><ellipse cx="33" cy="16" rx="4" ry="2.6" fill="#7d9a4a" transform="rotate(-25 33 16)"/>',
 coffee:'<path d="M11 16h20v12a10 10 0 0 1-20 0z" fill="#fff" stroke="#c9c2b4"/><path d="M13 19h16v9a8 8 0 0 1-16 0z" fill="#6b4426"/><path d="M31 19h4a4 4 0 0 1 0 8h-4" fill="none" stroke="#c9c2b4" stroke-width="2"/><path d="M18 10c2-2 0-4 0-4M24 10c2-2 0-4 0-4" stroke="#c9c2b4" stroke-width="1.6" fill="none"/>',
 cocoa:'<path d="M12 16h20v12a10 10 0 0 1-20 0z" fill="#fff" stroke="#c9c2b4"/><path d="M14 19h16v9a8 8 0 0 1-16 0z" fill="#7a4a2a"/><circle cx="19" cy="22" r="1.5" fill="#a9714a"/><circle cx="25" cy="25" r="1.5" fill="#a9714a"/>',
+whitefish:'<path d="M8 24c8-9 22-9 28 0-6 9-20 9-28 0z" fill="#dfe7ef"/><path d="M36 24l6-6v12z" fill="#c6d3de"/><circle cx="14" cy="22" r="1.5" fill="#3a2a20"/>',
+otherfish:'<path d="M7 24c9-10 23-10 29 0-6 10-20 10-29 0z" fill="#c8d8e4"/><path d="M16 17c4 4 4 10 0 14M23 16c4 5 4 11 0 16" stroke="#9eb4c4" stroke-width="1.4" fill="none"/><path d="M36 24l6-6v12z" fill="#b0c4d4"/><circle cx="13" cy="22" r="1.5" fill="#3a2a20"/>'
+};
+const svg=(k,s)=>'<svg width="'+s+'" height="'+s+'" viewBox="0 0 44 44">'+(ICON[k]||'')+'</svg>';
+
 /* ---------- food database, per 100 g net edible portion ---------- */
 /* Audited against USDA FoodData Central (edible portion without peels, shells, pits, or bones).
    Meats & fish are standardized to raw net weight (except shrimp: cooked, peeled).
@@ -783,6 +788,19 @@ carb=Math.max(50,carb+Math.round((kcal-macroKcal)/4));
 }
 const pufaCap=Math.max(2,round(kcal*0.02/9,1));
 return {bmr:round(bmr),kcal,carb,prot,fat,pufaCap,floorHit,minFloor,fatFloorHit};}
+
+/* ---------- ROW 4 : meal library ---------- */
+function mealItems(meal){return meal.it.map(([id,g])=>FMAP[id]?makeItem(FMAP[id],g):null).filter(Boolean);}
+function renderMeals(){
+$('mealLibrary').innerHTML=SLOTS.map(slot=>{
+const cards=MEALS.filter(m=>m.slot===slot).map(m=>{
+const items=mealItems(m),t=totalsOf(items);
+const missing=m.it.filter(([id])=>!FMAP[id]||blocked(FMAP[id])).map(([id])=>FMAP[id]?FMAP[id].n:id);
+const off=missing.length?' style="opacity:.45"':'';
+const btn=missing.length?'':'<button class="qadd" data-meal="'+m.id+'" title="Add to today\'s entries">+</button>';
+const list=m.it.map(([id,g])=>{const f=FMAP[id];if(!f)return id;
+return (f.unit==='egg'?Math.round(g/(f.eggG||50))+' egg'+(Math.round(g/(f.eggG||50))>1?'s':''):g+' g')+' '+f.n.toLowerCase();}).join(' · ');
+const pdfTxt=m.pdf?('<span> · plan '+m.pdf+'</span>'):'';
 const warn=missing.length?'<div class="hint" style="color:var(--warn);margin-top:4px">Excluded: '+missing.join(', ')+'</div>':'';
 return '<div class="meal"'+off+'>'+btn+'<div class="mn">'+m.n+'</div>'+
 '<div class="mi">'+list+'</div>'+
