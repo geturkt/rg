@@ -11,6 +11,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,
 .wrap{max-width:1280px;margin:0 auto;padding:22px 18px 60px}
 header.top{display:flex;align-items:center;gap:14px;margin-bottom:6px;flex-wrap:wrap}
 h1{font-size:22px;margin:0}
+.verbadge{margin-left:auto;background:#fffdf9;border:1px solid var(--line);border-radius:10px;padding:6px 12px;text-align:right;font-size:12px;line-height:1.35;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.verbadge strong{display:block;font-size:13px;color:var(--accent)}
+.verbadge span{color:var(--muted);font-size:11px}
 .sub{color:var(--muted);font-size:13px;margin:2px 0 18px}
 .row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px;box-shadow:var(--shadow)}
 .rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
@@ -160,15 +163,35 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 .slotdet .cap{margin-top:3px}
 .slotdet[open] .cap{margin-bottom:10px}
 .slotdet:not([open]) .cap{margin-bottom:0}
+.r3prog{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}
+.r3head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.r3head h3{margin:0;font-size:14.5px}
+.avgbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fffdf9;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px}
+.microgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+@media(max-width:980px){.microgrid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){.microgrid{grid-template-columns:repeat(2,1fr)}}
+.mic{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+.mic .mh{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;font-weight:700}
+.mic .mv{font-size:12.5px;font-weight:700;margin-top:2px}
+.mic .ms{font-size:10.5px;color:var(--muted)}
+.mic .mbar{height:5px;border-radius:4px;background:#efe9dd;overflow:hidden;margin-top:5px}
+.mic .mbar i{display:block;height:100%;background:var(--accent2);transition:.2s}
+.mic .mbar.low i{background:var(--accent)}
+.mic .mbar.high i{background:var(--warn)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
+<!-- NOTE: Always update the version label and date below (#appVersion) whenever making changes to this HTML file. -->
 <header class="top">
 <svg width="34" height="34" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#f6d3ab"/><path d="M20 6a14 14 0 0 1 0 28z" fill="#d98324"/><circle cx="20" cy="20" r="4.5" fill="#fffdf9"/></svg>
 <div><h1>Peat-Style Daily Planner</h1>
 <div class="sub">Meal library · custom foods · drinks builder · editable portions &amp; macros · daily progress · save your day</div></div>
+<div class="verbadge" id="appVersion" title="Update this version and date whenever modifying the file">
+<strong>v1.6 · 2026-11-27</strong>
+<span>Updated Nov 27, 2026</span>
+</div>
 </header>
 
 <!-- ROW 1 -->
@@ -207,7 +230,9 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 
 <!-- ROW 3 -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 3</span><h2>Recommended daily calories &amp; macros</h2><span class="pill">Mifflin–St Jeor × activity</span></div>
+<div class="rowhead"><span class="step">ROW 3</span><h2>Recommended daily calories &amp; macros</h2><span class="pill">Mifflin–St Jeor × activity</span>
+<button class="btn green sm" id="newDayBtn" style="margin-left:auto" title="Archive today's totals into your 30-day trailing history and clear Row 7">Start a new day</button>
+</div>
 <div id="calcLock" class="locked">
 <div class="macro">
 <div class="mcard"><div class="k">Daily energy</div><div class="v" id="kcal">—</div><div class="s" id="kcalsub">kcal / day</div></div>
@@ -226,6 +251,30 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <div class="pufatrack" id="pufatrack"><i style="width:0%"></i></div>
 <div class="note" id="pufastatus">Add meals below to track linoleic + linolenic acid intake.</div>
 </div>
+
+<!-- Row 3 Integrated Daily Progress, Trailing 30-Day Average & Micronutrients -->
+<div class="r3prog">
+<div class="r3head">
+<h3>Today's progress &amp; trailing 30-day average</h3>
+<div class="avgbox" id="avg30Box">
+<span><strong>Trailing 30-day calorie avg:</strong> <span id="avg30Kcal">—</span></span>
+<span class="hint" id="avg30Meta">(0 logged days)</span>
+</div>
+</div>
+<div class="macro">
+<div class="mcard"><div class="k">Today's energy</div><div class="v" id="r3TotK">0</div><div class="s" id="r3TotKs">kcal</div><div class="bar"><i id="r3BarK" style="width:0%;background:var(--accent)"></i></div></div>
+<div class="mcard"><div class="k" style="color:var(--carb)">Carbs today</div><div class="v" id="r3TotC">0</div><div class="s" id="r3TotCs">g</div><div class="bar"><i id="r3BarC" style="width:0%;background:var(--carb)"></i></div></div>
+<div class="mcard"><div class="k" style="color:var(--prot)">Protein today</div><div class="v" id="r3TotP">0</div><div class="s" id="r3TotPs">g</div><div class="bar"><i id="r3BarP" style="width:0%;background:var(--prot)"></i></div></div>
+<div class="mcard"><div class="k" style="color:var(--fat)">Fat today</div><div class="v" id="r3TotF">0</div><div class="s" id="r3TotFs">g</div><div class="bar"><i id="r3BarF" style="width:0%;background:var(--fat)"></i></div></div>
+</div>
+
+<details style="margin-top:12px">
+<summary style="font-weight:600;color:var(--ink)">Essential food micronutrients — Today vs. Trailing 30-day average <span class="hint" style="font-weight:400">(Vitamin D excluded — supplemented)</span></summary>
+<div class="microgrid" id="microGrid"></div>
+<div class="note" style="margin-top:8px">Values reflect bioavailable food intake per 100 g net edible portion (USDA FoodData Central). Trailing 30-day average blends completed days in your 30-day log with today's active intake.</div>
+</details>
+</div>
+
 <div class="note" style="margin-top:10px">Peat emphasis: carbohydrate-led energy, protein spread across meals with gelatin/collagen balancing muscle-meat amino acids, fat kept low and saturated. Nuts, seeds, seed oils and fish oils are excluded. Items marked <span class="flag">MOD</span> are moderate-PUFA or Peat-cautionary — counted strictly and never auto-picked.</div>
 </div>
 <div class="empty" id="calcMsg">Complete rows 1 and 2 to calculate your targets.</div>
@@ -531,6 +580,109 @@ const FMAP={};FOODS.forEach(f=>FMAP[f.id]=f);
 // Backward compatibility aliases
 FMAP.egg_l=FMAP.egglarge;
 FMAP.egg_m=FMAP.eggmedium;
+
+/* ---------- Essential Food Micronutrients (per 100g net edible portion, Vitamin D excluded) ---------- */
+/* Keys: ca (mg), mg (mg), k (mg), na (mg), fe (mg), zn (mg), cu (mg), se (mcg),
+         va (mcg RAE), vc (mg), ve (mg), b1 (mg), b2 (mg), b6 (mg), b12 (mcg), fol (mcg DFE) */
+const MICROS={
+oj:{ca:11,mg:11,k:200,na:1,fe:0.2,zn:0.05,cu:0.04,se:0.1,va:10,vc:50,ve:0.04,b1:0.09,b2:0.03,b6:0.04,b12:0,fol:30},
+pomj:{ca:11,mg:7,k:214,na:9,fe:0.1,zn:0.09,cu:0.02,se:0.3,va:0,vc:0.1,ve:0.38,b1:0.02,b2:0.02,b6:0.04,b12:0,fol:24},
+grapej:{ca:11,mg:10,k:104,na:5,fe:0.25,zn:0.07,cu:0.03,se:0.1,va:0,vc:0.1,ve:0,b1:0.02,b2:0.02,b6:0.03,b12:0,fol:0},
+applej:{ca:8,mg:5,k:101,na:4,fe:0.12,zn:0.02,cu:0.01,se:0.1,va:0,vc:0.9,ve:0.01,b1:0.02,b2:0.02,b6:0.02,b12:0,fol:0},
+milk:{ca:113,mg:10,k:132,na:43,fe:0.03,zn:0.37,cu:0.01,se:3.7,va:46,vc:0,ve:0.07,b1:0.05,b2:0.18,b6:0.04,b12:0.45,fol:5},
+skimmilk:{ca:122,mg:11,k:156,na:42,fe:0.03,zn:0.42,cu:0.01,se:3.1,va:61,vc:0,ve:0.01,b1:0.05,b2:0.18,b6:0.04,b12:0.50,fol:5},
+promilk:{ca:165,mg:15,k:195,na:60,fe:0.04,zn:0.55,cu:0.02,se:4.5,va:25,vc:0,ve:0.03,b1:0.06,b2:0.25,b6:0.05,b12:0.65,fol:7},
+chocmilk:{ca:112,mg:22,k:168,na:60,fe:0.30,zn:0.45,cu:0.08,se:3.5,va:38,vc:0,ve:0.06,b1:0.04,b2:0.17,b6:0.04,b12:0.40,fol:5},
+banmilk:{ca:85,mg:16,k:205,na:32,fe:0.10,zn:0.31,cu:0.03,se:3.0,va:35,vc:2.6,ve:0.08,b1:0.05,b2:0.15,b6:0.14,b12:0.33,fol:10},
+coffee:{ca:2,mg:3,k:49,na:2,fe:0.01,zn:0.02,cu:0,se:0,va:0,vc:0,ve:0.01,b1:0.01,b2:0.08,b6:0,b12:0,fol:2},
+espresso:{ca:2,mg:80,k:115,na:14,fe:0.13,zn:0.05,cu:0.01,se:0,va:0,vc:0.2,ve:0,b1:0,b2:0.18,b6:0,b12:0,fol:1},
+americano:{ca:2,mg:13,k:25,na:4,fe:0.02,zn:0.01,cu:0,se:0,va:0,vc:0,ve:0,b1:0,b2:0.03,b6:0,b12:0,fol:0},
+cappuccino:{ca:95,mg:12,k:125,na:38,fe:0.04,zn:0.32,cu:0.01,se:3.1,va:38,vc:0,ve:0.06,b1:0.04,b2:0.16,b6:0.03,b12:0.37,fol:4},
+flatwhite:{ca:92,mg:12,k:122,na:37,fe:0.04,zn:0.31,cu:0.01,se:3.0,va:37,vc:0,ve:0.06,b1:0.04,b2:0.16,b6:0.03,b12:0.36,fol:4},
+latte:{ca:100,mg:11,k:128,na:39,fe:0.04,zn:0.34,cu:0.01,se:3.3,va:40,vc:0,ve:0.06,b1:0.04,b2:0.17,b6:0.03,b12:0.40,fol:4},
+cortado:{ca:68,mg:18,k:120,na:30,fe:0.06,zn:0.24,cu:0.01,se:2.2,va:27,vc:0,ve:0.04,b1:0.03,b2:0.15,b6:0.02,b12:0.26,fol:3},
+orange:{ca:40,mg:10,k:181,na:0,fe:0.10,zn:0.07,cu:0.05,se:0.5,va:11,vc:53.2,ve:0.18,b1:0.09,b2:0.04,b6:0.06,b12:0,fol:30},
+mango:{ca:11,mg:10,k:168,na:1,fe:0.16,zn:0.09,cu:0.11,se:0.6,va:54,vc:36.4,ve:0.90,b1:0.03,b2:0.04,b6:0.12,b12:0,fol:43},
+kiwi:{ca:34,mg:17,k:312,na:3,fe:0.31,zn:0.14,cu:0.13,se:0.2,va:4,vc:92.7,ve:1.46,b1:0.03,b2:0.03,b6:0.06,b12:0,fol:25},
+banana:{ca:5,mg:27,k:358,na:1,fe:0.26,zn:0.15,cu:0.08,se:1.0,va:3,vc:8.7,ve:0.10,b1:0.03,b2:0.07,b6:0.37,b12:0,fol:20},
+apple:{ca:6,mg:5,k:107,na:1,fe:0.12,zn:0.04,cu:0.03,se:0,va:3,vc:4.6,ve:0.18,b1:0.02,b2:0.03,b6:0.04,b12:0,fol:3},
+pear:{ca:9,mg:7,k:116,na:1,fe:0.18,zn:0.10,cu:0.08,se:0.1,va:1,vc:4.3,ve:0.12,b1:0.01,b2:0.03,b6:0.03,b12:0,fol:7},
+melon:{ca:9,mg:12,k:267,na:16,fe:0.21,zn:0.18,cu:0.04,se:0.4,va:169,vc:36.7,ve:0.05,b1:0.04,b2:0.02,b6:0.07,b12:0,fol:21},
+grapes:{ca:10,mg:7,k:191,na:2,fe:0.36,zn:0.07,cu:0.13,se:0.1,va:3,vc:3.2,ve:0.19,b1:0.07,b2:0.07,b6:0.09,b12:0,fol:2},
+berries:{ca:16,mg:13,k:153,na:1,fe:0.41,zn:0.14,cu:0.05,se:0.4,va:1,vc:58.8,ve:0.29,b1:0.02,b2:0.02,b6:0.05,b12:0,fol:24},
+honey:{ca:6,mg:2,k:52,na:4,fe:0.42,zn:0.22,cu:0.04,se:0.8,va:0,vc:0.5,ve:0,b1:0,b2:0.04,b6:0.02,b12:0,fol:2},
+sugar:{ca:1,mg:0,k:2,na:1,fe:0.05,zn:0.01,cu:0.01,se:0.6,va:0,vc:0,ve:0,b1:0,b2:0.02,b6:0,b12:0,fol:0},
+potato:{ca:8,mg:22,k:379,na:5,fe:0.31,zn:0.30,cu:0.17,se:0.3,va:0,vc:13.0,ve:0.01,b1:0.11,b2:0.02,b6:0.30,b12:0,fol:10},
+rice:{ca:10,mg:12,k:35,na:1,fe:0.20,zn:0.49,cu:0.07,se:7.5,va:0,vc:0,ve:0.04,b1:0.02,b2:0.01,b6:0.09,b12:0,fol:3},
+rice_dry:{ca:28,mg:25,k:115,na:5,fe:0.80,zn:1.09,cu:0.22,se:15.1,va:0,vc:0,ve:0.11,b1:0.07,b2:0.05,b6:0.16,b12:0,fol:8},
+sourdough:{ca:20,mg:24,k:115,na:480,fe:1.40,zn:0.85,cu:0.14,se:22.0,va:0,vc:0,ve:0.10,b1:0.18,b2:0.12,b6:0.05,b12:0,fol:45},
+yufka:{ca:25,mg:28,k:130,na:520,fe:1.50,zn:0.90,cu:0.16,se:25.0,va:0,vc:0,ve:0.12,b1:0.20,b2:0.13,b6:0.06,b12:0,fol:40},
+vermicelli:{ca:21,mg:53,k:223,na:6,fe:1.28,zn:1.41,cu:0.29,se:63.2,va:0,vc:0,ve:0.11,b1:0.09,b2:0.06,b6:0.14,b12:0,fol:18},
+oats:{ca:54,mg:177,k:429,na:2,fe:4.72,zn:3.97,cu:0.63,se:28.9,va:0,vc:0,ve:0.42,b1:0.76,b2:0.14,b6:0.12,b12:0,fol:56},
+carrot:{ca:30,mg:10,k:235,na:58,fe:0.34,zn:0.20,cu:0.02,se:0.7,va:852,vc:3.6,ve:1.03,b1:0.04,b2:0.04,b6:0.15,b12:0,fol:14},
+carrotsalad:{ca:31,mg:11,k:304,na:180,fe:0.29,zn:0.23,cu:0.04,se:0.1,va:793,vc:5.6,ve:0.63,b1:0.06,b2:0.05,b6:0.13,b12:0,fol:18},
+tomato:{ca:10,mg:11,k:237,na:5,fe:0.27,zn:0.17,cu:0.06,se:0,va:42,vc:13.7,ve:0.54,b1:0.04,b2:0.02,b6:0.08,b12:0,fol:15},
+cucumber:{ca:16,mg:13,k:147,na:2,fe:0.28,zn:0.20,cu:0.04,se:0.3,va:5,vc:2.8,ve:0.03,b1:0.03,b2:0.03,b6:0.04,b12:0,fol:7},
+onion:{ca:22,mg:11,k:166,na:3,fe:0.24,zn:0.21,cu:0.04,se:0.6,va:0,vc:5.2,ve:0.02,b1:0.04,b2:0.02,b6:0.13,b12:0,fol:15},
+mushroom:{ca:6,mg:12,k:356,na:2,fe:1.74,zn:0.87,cu:0.50,se:11.9,va:0,vc:4.0,ve:0.01,b1:0.07,b2:0.30,b6:0.09,b12:0.04,fol:18},
+squash:{ca:28,mg:22,k:284,na:1,fe:0.57,zn:0.26,cu:0.09,se:0.4,va:261,vc:9.6,ve:0.80,b1:0.07,b2:0.04,b6:0.12,b12:0,fol:20},
+icecream:{ca:128,mg:14,k:199,na:80,fe:0.09,zn:0.69,cu:0.02,se:1.8,va:118,vc:0.6,ve:0.30,b1:0.04,b2:0.24,b6:0.05,b12:0.39,fol:5},
+cocoa:{ca:128,mg:499,k:1524,na:21,fe:13.86,zn:6.81,cu:3.79,se:14.3,va:0,vc:0,ve:0.10,b1:0.08,b2:0.24,b6:0.12,b12:0,fol:32},
+cheese:{ca:720,mg:28,k:95,na:650,fe:0.65,zn:3.20,cu:0.03,se:15.0,va:265,vc:0,ve:0.60,b1:0.03,b2:0.38,b6:0.07,b12:1.10,fol:18},
+feta:{ca:493,mg:19,k:62,na:917,fe:0.65,zn:2.88,cu:0.03,se:15.0,va:125,vc:0,ve:0.18,b1:0.15,b2:0.84,b6:0.42,b12:1.69,fol:32},
+tulum:{ca:680,mg:25,k:85,na:880,fe:0.60,zn:3.10,cu:0.03,se:14.5,va:240,vc:0,ve:0.55,b1:0.04,b2:0.42,b6:0.09,b12:1.25,fol:20},
+cottage:{ca:83,mg:8,k:104,na:364,fe:0.07,zn:0.40,cu:0.03,se:9.7,va:37,vc:0,ve:0.08,b1:0.03,b2:0.16,b6:0.05,b12:0.43,fol:12},
+cottage12:{ca:83,mg:8,k:104,na:364,fe:0.07,zn:0.40,cu:0.03,se:9.7,va:37,vc:0,ve:0.08,b1:0.03,b2:0.16,b6:0.05,b12:0.43,fol:12},
+cottage2:{ca:111,mg:9,k:125,na:330,fe:0.13,zn:0.51,cu:0.03,se:11.9,va:20,vc:0,ve:0.03,b1:0.03,b2:0.25,b6:0.06,b12:0.47,fol:12},
+yogurt:{ca:121,mg:12,k:155,na:46,fe:0.05,zn:0.59,cu:0.01,se:2.2,va:27,vc:0.5,ve:0.06,b1:0.03,b2:0.14,b6:0.03,b12:0.37,fol:7},
+gelatin:{ca:55,mg:22,k:16,na:196,fe:1.11,zn:0.20,cu:0.13,se:28.4,va:0,vc:0,ve:0,b1:0.01,b2:0.25,b6:0.01,b12:0.20,fol:30},
+egg:{ca:50,mg:10,k:126,na:124,fe:1.19,zn:1.05,cu:0.01,se:30.8,va:149,vc:0,ve:1.03,b1:0.07,b2:0.51,b6:0.12,b12:1.11,fol:44},
+egglarge:{ca:50,mg:10,k:126,na:124,fe:1.19,zn:1.05,cu:0.01,se:30.8,va:149,vc:0,ve:1.03,b1:0.07,b2:0.51,b6:0.12,b12:1.11,fol:44},
+eggmedium:{ca:50,mg:10,k:126,na:124,fe:1.19,zn:1.05,cu:0.01,se:30.8,va:149,vc:0,ve:1.03,b1:0.07,b2:0.51,b6:0.12,b12:1.11,fol:44},
+friedegglarge:{ca:49,mg:10,k:121,na:148,fe:1.14,zn:1.00,cu:0.01,se:29.4,va:174,vc:0,ve:1.09,b1:0.07,b2:0.49,b6:0.11,b12:1.06,fol:42},
+friedeggmedium:{ca:49,mg:10,k:120,na:152,fe:1.13,zn:1.00,cu:0.01,se:29.2,va:178,vc:0,ve:1.10,b1:0.07,b2:0.48,b6:0.11,b12:1.05,fol:42},
+shrimp:{ca:70,mg:39,k:259,na:111,fe:0.51,zn:1.64,cu:0.19,se:49.5,va:90,vc:0,ve:2.20,b1:0.02,b2:0.02,b6:0.24,b12:1.66,fol:24},
+oyster:{ca:8,mg:22,k:168,na:106,fe:5.11,zn:39.3,cu:1.58,se:77.0,va:45,vc:8.0,ve:0.85,b1:0.12,b2:0.23,b6:0.05,b12:16.0,fol:10},
+beef:{ca:12,mg:22,k:330,na:60,fe:2.10,zn:4.50,cu:0.08,se:21.0,va:2,vc:0,ve:0.15,b1:0.06,b2:0.18,b6:0.38,b12:2.20,fol:8},
+mince:{ca:18,mg:19,k:270,na:66,fe:1.94,zn:4.18,cu:0.06,se:16.4,va:4,vc:0,ve:0.17,b1:0.05,b2:0.15,b6:0.32,b12:2.14,fol:7},
+lambshank:{ca:14,mg:22,k:280,na:68,fe:1.85,zn:4.10,cu:0.11,se:22.0,va:0,vc:0,ve:0.16,b1:0.11,b2:0.22,b6:0.15,b12:2.45,fol:18},
+lamb:{ca:12,mg:21,k:265,na:62,fe:1.65,zn:3.65,cu:0.10,se:20.0,va:0,vc:0,ve:0.18,b1:0.11,b2:0.21,b6:0.14,b12:2.35,fol:16},
+chicken:{ca:5,mg:28,k:334,na:45,fe:0.37,zn:0.68,cu:0.04,se:22.8,va:9,vc:0,ve:0.56,b1:0.09,b2:0.18,b6:0.81,b12:0.21,fol:9},
+liver:{ca:5,mg:18,k:313,na:69,fe:4.90,zn:4.00,cu:9.76,se:39.7,va:4968,vc:1.3,ve:0.38,b1:0.19,b2:2.76,b6:1.08,b12:59.3,fol:290},
+cod:{ca:16,mg:32,k:413,na:54,fe:0.38,zn:0.45,cu:0.03,se:33.1,va:12,vc:1.0,ve:0.64,b1:0.08,b2:0.07,b6:0.25,b12:0.91,fol:7},
+otherfish:{ca:20,mg:29,k:380,na:62,fe:0.65,zn:0.60,cu:0.05,se:36.0,va:28,vc:0.5,ve:0.95,b1:0.10,b2:0.12,b6:0.35,b12:2.80,fol:12},
+butter:{ca:24,mg:2,k:24,na:643,fe:0.02,zn:0.09,cu:0,se:1.0,va:684,vc:0,ve:2.32,b1:0.01,b2:0.03,b6:0,b12:0.17,fol:3},
+coconut:{ca:0,mg:0,k:0,na:0,fe:0.04,zn:0,cu:0,se:0,va:0,vc:0,ve:0.09,b1:0,b2:0,b6:0,b12:0,fol:0},
+oliveoil:{ca:1,mg:0,k:1,na:2,fe:0.56,zn:0,cu:0,se:0,va:0,vc:0,ve:14.35,b1:0,b2:0,b6:0,b12:0,fol:0}
+};
+const MICRO_DEFS=[
+{k:'ca',n:'Calcium',u:'mg',d:0,rda:1000},
+{k:'mg',n:'Magnesium',u:'mg',d:0,rda:400,rdaF:320},
+{k:'k',n:'Potassium',u:'mg',d:0,rda:3400,rdaF:2600},
+{k:'na',n:'Sodium',u:'mg',d:0,rda:2000},
+{k:'fe',n:'Iron',u:'mg',d:1,rda:8,rdaF:18},
+{k:'zn',n:'Zinc',u:'mg',d:1,rda:11,rdaF:8},
+{k:'cu',n:'Copper',u:'mg',d:2,rda:0.9},
+{k:'se',n:'Selenium',u:'mcg',d:0,rda:55},
+{k:'va',n:'Vitamin A',u:'mcg',d:0,rda:900,rdaF:700},
+{k:'vc',n:'Vitamin C',u:'mg',d:0,rda:90,rdaF:75},
+{k:'ve',n:'Vitamin E',u:'mg',d:1,rda:15},
+{k:'b1',n:'Vitamin B1',u:'mg',d:2,rda:1.2,rdaF:1.1},
+{k:'b2',n:'Vitamin B2',u:'mg',d:2,rda:1.3,rdaF:1.1},
+{k:'b6',n:'Vitamin B6',u:'mg',d:2,rda:1.3},
+{k:'b12',n:'Vitamin B12',u:'mcg',d:1,rda:2.4},
+{k:'fol',n:'Folate',u:'mcg',d:0,rda:400}
+];
+function emptyMicros(){const o={};MICRO_DEFS.forEach(m=>o[m.k]=0);return o;}
+function itemMicro(it,k){
+const m=MICROS[it.f.id];if(!m||!m[k])return 0;
+return m[k]*gramsOf(it)/100;}
+function usedMicros(){
+const out=emptyMicros();
+S.recipes.forEach(r=>r.items.forEach(it=>{
+MICRO_DEFS.forEach(m=>{out[m.k]+=itemMicro(it,m.k);});
+}));
+return out;}
 const CATS=[
 {k:'carb',t:'Carbohydrates',cap:'Net peeled/trimmed weight — fruit, honey, starch, breads, vegetables.'},
 {k:'prot',t:'Proteins',cap:'Cheeses, gelatin, shellfish, raw ruminant/poultry/fish, peeled eggs. Balance muscle meats with gelatin.'},
@@ -637,11 +789,13 @@ const SLOTS=['Breakfast','Lunch','Snack','Dinner'];
 /* ---------- state ---------- */
 const S={age:null,gender:'',height:null,weight:null,act:null,goal:null,
 excl:new Set(),sel:new Set(),topOrder:[],openSlots:new Set(),recipes:[],targets:null,
+history:[],lastResetDate:'',
 sm:{base:'milk',vol:300,fruit:'banana',
 on:{fruit:true,cocoa:true,honey:true,sugar:false,gelatin:false,coconut:false},
 amt:{fruit:100,cocoa:5,honey:15,sugar:10,gelatin:10,coconut:5}}};
 const $=id=>document.getElementById(id);
 const round=(x,d=0)=>Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const rnd=a=>a.length?a[Math.floor(Math.random()*a.length)]:null;
 const r5=x=>Math.max(5,Math.round(x/5)*5);
@@ -1202,6 +1356,62 @@ if(!r.items.length)S.recipes=S.recipes.filter(x=>x.id!==r.id);else recalc(r);
 renderRecipes();update();});
 $('clearAll').onclick=()=>{S.recipes=[];renderRecipes();update();};
 
+/* ---------- Start a new day & 30-day trailing history ---------- */
+function pruneHistory30(){
+const cutoff=Date.now()-30*864e5;
+S.history=(S.history||[]).filter(h=>h&&typeof h.ts==='number'&&h.ts>=cutoff);}
+function computeTrailing30(todayKcal,todayMicros){
+pruneHistory30();
+const past=S.history||[];
+const hasToday=todayKcal>0||S.recipes.length>0;
+const count=past.length+(hasToday?1:0);
+if(!count)return {days:0,completedDays:past.length,kcal:0,micros:emptyMicros()};
+let sumK=past.reduce((a,h)=>a+(h.kcal||0),0)+(hasToday?todayKcal:0);
+const sumM=emptyMicros();
+past.forEach(h=>{
+MICRO_DEFS.forEach(m=>{sumM[m.k]+=((h.micros&&h.micros[m.k])||0);});
+});
+if(hasToday){
+MICRO_DEFS.forEach(m=>{sumM[m.k]+=(todayMicros[m.k]||0);});
+}
+const avgM=emptyMicros();
+MICRO_DEFS.forEach(m=>{avgM[m.k]=sumM[m.k]/count;});
+return {days:count,completedDays:past.length,kcal:sumK/count,micros:avgM};}
+function executeNewDay(){
+const t=usedTotals();
+const m=usedMicros();
+const hasEntries=S.recipes.length>0||t.kcal>0;
+if(hasEntries){
+S.history.push({date:todayKey(),ts:Date.now(),kcal:round(t.kcal,1),c:round(t.c,1),p:round(t.p,1),f:round(t.f,1),pufa:round(t.pufa,2),micros:m});
+pruneHistory30();
+}
+S.lastResetDate=todayKey();
+S.recipes=[];
+renderRecipes();
+update();
+toast(hasEntries?'New day started — previous intake logged to 30-day average.':'New day started — Row 7 is ready.');}
+$('newDayBtn').onclick=()=>{
+const today=todayKey();
+const t=usedTotals();
+const alreadyToday=S.lastResetDate===today;
+if(alreadyToday){
+const warnings=[
+'You already pressed <strong>Start a new day</strong> earlier today ('+today+').',
+S.recipes.length
+?'Logging another reset today will record an additional entry ('+round(t.kcal)+' kcal) into your trailing 30-day average and clear Row 7.'
+:'Row 7 is currently empty — resetting again will clear your current day without adding new calories.'
+];
+askConfirm(
+'Start another new day today?',
+'Second reset detected on the same calendar date.',
+warnings,
+S.recipes.length?['Current Row 7: '+round(t.kcal)+' kcal','30-day logged days: '+S.history.length]:['Row 7 is empty'],
+executeNewDay
+);
+}else{
+executeNewDay();
+}};
+
 /* ---------- save / load & cookies ---------- */
 const KEY='peatPlannerPlans_v6',AUTO='peatPlannerAutosave_v6',COOKIE_KEY='peatPlannerPrefs_v1';
 function setCookie(name,val,days){
@@ -1234,6 +1444,7 @@ function snapshot(name){
 return {v:6,name:name||'Untitled plan',savedAt:new Date().toISOString(),
 profile:{age:S.age,gender:S.gender,height:S.height,weight:S.weight,act:S.act,goal:S.goal,excl:[...S.excl]},
 sm:S.sm,sel:[...S.sel],topOrder:S.topOrder,
+history:S.history,lastResetDate:S.lastResetDate,
 recipes:S.recipes.map(r=>({id:r.id,name:r.name,kind:r.kind,slot:r.slot,items:r.items.map(it=>{
 const obj={id:it.f.id,g:it.g,n:it.n};
 if(it.ov)obj.ov=Object.assign({},it.ov);
@@ -1244,6 +1455,9 @@ S.age=p.profile.age;S.gender=p.profile.gender||'';S.height=p.profile.height;S.we
 S.act=p.profile.act;S.goal=p.profile.goal;S.excl=new Set(p.profile.excl||[]);
 S.sel=new Set((p.sel||[]).filter(id=>FMAP[id]));
 S.topOrder=Array.isArray(p.topOrder)?p.topOrder.filter(id=>FMAP[id]):[];
+S.history=Array.isArray(p.history)?p.history:[];
+S.lastResetDate=p.lastResetDate||'';
+pruneHistory30();
 if(p.sm){
 S.sm=Object.assign({base:'milk',vol:300,fruit:'banana'},p.sm);
 S.sm.on=Object.assign({fruit:true,cocoa:true,honey:true,sugar:false,gelatin:false,coconut:false},p.sm.on||{});
@@ -1337,12 +1551,24 @@ const pc=T.carb*4/T.kcal*100,pp=T.prot*4/T.kcal*100,pf=Math.max(0,100-pc-pp);
 $('split').innerHTML='<i style="width:'+pc+'%;background:var(--carb)"></i><i style="width:'+pp+'%;background:var(--prot)"></i><i style="width:'+pf+'%;background:var(--fat)"></i>';
 $('pufalimit').textContent=' — keep polyunsaturated fat at or below '+T.pufaCap+' g/day (≈2% of energy).';}
 const t=usedTotals();
+const mToday=usedMicros();
+const avg30=computeTrailing30(t.kcal,mToday);
+$('avg30Kcal').textContent=avg30.days?round(avg30.kcal)+' kcal/day':'—';
+$('avg30Meta').textContent=avg30.days?('('+avg30.days+' day'+(avg30.days===1?'':'s')+' in trailing 30d window)'):'(no days logged yet)';
+
 if(T){
 $('totK').textContent=round(t.kcal);$('barK').style.width=Math.min(100,t.kcal/T.kcal*100)+'%';
 $('totKs').textContent='of '+T.kcal+' kcal · '+round(t.kcal/T.kcal*100)+'%';
 $('totC').textContent=round(t.c,1);$('barC').style.width=Math.min(100,t.c/T.carb*100)+'%';$('totCs').textContent='of '+T.carb+' g';
 $('totP').textContent=round(t.p,1);$('barP').style.width=Math.min(100,t.p/T.prot*100)+'%';$('totPs').textContent='of '+T.prot+' g';
 $('totF').textContent=round(t.f,1);$('barF').style.width=Math.min(100,t.f/T.fat*100)+'%';$('totFs').textContent='of '+T.fat+' g';
+
+$('r3TotK').textContent=round(t.kcal);$('r3BarK').style.width=Math.min(100,t.kcal/T.kcal*100)+'%';
+$('r3TotKs').textContent='of '+T.kcal+' kcal · '+round(t.kcal/T.kcal*100)+'%';
+$('r3TotC').textContent=round(t.c,1);$('r3BarC').style.width=Math.min(100,t.c/T.carb*100)+'%';$('r3TotCs').textContent='of '+T.carb+' g';
+$('r3TotP').textContent=round(t.p,1);$('r3BarP').style.width=Math.min(100,t.p/T.prot*100)+'%';$('r3TotPs').textContent='of '+T.prot+' g';
+$('r3TotF').textContent=round(t.f,1);$('r3BarF').style.width=Math.min(100,t.f/T.fat*100)+'%';$('r3TotFs').textContent='of '+T.fat+' g';
+
 const pct=Math.min(100,t.pufa/T.pufaCap*100),over=t.pufa>T.pufaCap+0.001;
 $('pufatrack').classList.toggle('over',over);
 $('pufatrack').firstElementChild.style.width=pct+'%';
@@ -1354,9 +1580,31 @@ $('totK').textContent=round(t.kcal);$('totC').textContent=round(t.c,1);
 $('totP').textContent=round(t.p,1);$('totF').textContent=round(t.f,1);
 ['barK','barC','barP','barF'].forEach(id=>$(id).style.width='0%');
 $('totKs').textContent='kcal (no target yet)';
+
+$('r3TotK').textContent=round(t.kcal);$('r3TotC').textContent=round(t.c,1);
+$('r3TotP').textContent=round(t.p,1);$('r3TotF').textContent=round(t.f,1);
+['r3BarK','r3BarC','r3BarP','r3BarF'].forEach(id=>$(id).style.width='0%');
+$('r3TotKs').textContent='kcal (no target yet)';
+
 $('pufatrack').firstElementChild.style.width='0%';
 $('pufastatus').innerHTML='PUFA so far: <strong>'+round(t.pufa,2)+' g</strong> — set rows 1 and 2 for a ceiling.';
 $('remain').textContent='';}
+
+/* Render Row 3 Micronutrients Grid */
+const isFem=S.gender==='female';
+$('microGrid').innerHTML=MICRO_DEFS.map(m=>{
+const rda=(isFem&&m.rdaF)?m.rdaF:m.rda;
+const cur=mToday[m.k]||0;
+const avg=avg30.days?(avg30.micros[m.k]||0):0;
+const pct=rda>0?Math.min(100,cur/rda*100):0;
+const barCls=cur<rda*0.5?' low':(m.k==='na'&&cur>2300?' high':'');
+return '<div class="mic">'+
+'<div class="mh"><span>'+m.n+'</span><span class="hint">'+round(cur/rda*100)+'%</span></div>'+
+'<div class="mv">'+round(cur,m.d)+' <span class="ms">/ '+rda+' '+m.u+'</span></div>'+
+'<div class="ms">30d avg: <strong>'+round(avg,m.d)+' '+m.u+'</strong></div>'+
+'<div class="mbar'+barCls+'"><i style="width:'+pct+'%"></i></div>'+
+'</div>';}).join('');
+
 autosave();}
 function renderAll(){renderMeals();renderLibrary();renderDrinks();fillBuilder();renderRecipes();update();}
 
