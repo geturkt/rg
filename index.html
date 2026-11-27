@@ -16,20 +16,50 @@ h1{font-size:22px;margin:0}
 .verbadge span{color:var(--muted);font-size:11px}
 .sub{color:var(--muted);font-size:13px;margin:2px 0 18px}
 .row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px;box-shadow:var(--shadow)}
-.rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.step{background:var(--accent);color:#fff;font-size:11px;font-weight:700;border-radius:20px;padding:3px 9px;letter-spacing:.6px}
-.step.teal{background:var(--drink)}
-.step.green{background:var(--accent2)}
-.rowhead h2{font-size:16px;margin:0}
+.rowhead{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.step{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--ink);background:#f7f2e7;border:1px solid var(--line);border-radius:10px;padding:6px 12px;transition:.15s}
+.rowdet>summary.rowhead:hover .step{border-color:var(--accent);background:#fdf1e3;color:#9a5a12}
+.step .arr{display:inline-block;transition:transform .15s;font-size:12px;color:var(--accent)}
+.step.teal .arr{color:var(--drink)}
+.step.green .arr{color:var(--accent2)}
+.rowdet[open]>summary.rowhead .step .arr{transform:rotate(90deg)}
 .hint{color:var(--muted);font-size:12.5px}
+.r3prog{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fffdf9;margin-top:12px}
+.r3head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.r3head h3{margin:0;font-size:14.5px}
+.avgbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;background:#f7f2e7;border:1px solid var(--line);border-radius:9px;padding:5px 10px}
+.microgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+@media(max-width:1020px){.microgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.microgrid{grid-template-columns:1fr}}
+.mic{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+.mic .mh{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:700}
+.mic .mv{font-size:13.5px;font-weight:700;margin-top:2px}
+.mic .ms{font-size:11px;color:var(--muted)}
+.mbar{height:6px;border-radius:5px;background:#efe9dd;overflow:hidden;margin-top:5px}
+.mbar i{display:block;height:100%;background:var(--accent2);transition:.2s}
+.mbar.low i{background:var(--accent)}
+.mbar.high i{background:var(--warn)}
+.slotdet>summary{display:flex;align-items:center;font-weight:700;font-size:14.5px;cursor:pointer;list-style:none}
+.slotdet>summary::-webkit-details-marker{display:none}
+.slotdet>summary::before{content:"▸";color:var(--accent2);margin-right:6px;display:inline-block;transition:transform .15s}
+.slotdet[open]>summary::before{transform:rotate(90deg)}
+.slotdet[open]>summary{margin-bottom:8px}
+.foodedit{background:none;border:0;padding:0;margin:0;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;text-align:left;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+.foodedit:hover{color:var(--accent)}
+.flag.edited{background:#e4f2ed;color:var(--accent2)}
+.editgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:520px){.editgrid{grid-template-columns:1fr}}
+.editbox{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fffdf9;font-size:13px;margin-bottom:14px}
 .grid{display:grid;gap:14px}
+.g6{grid-template-columns:repeat(6,1fr)}
 .g5{grid-template-columns:repeat(5,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
 .g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1180px){.g6{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:980px){.g5{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:860px){.g3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:620px){.g5,.g4,.g3{grid-template-columns:1fr}}
+@media(max-width:620px){.g6,.g5,.g4,.g3{grid-template-columns:1fr}}
 label.f{display:block;font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
 input[type=number],input[type=text],select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fffdf9;font-size:15px;color:var(--ink)}
 input:focus,select:focus{outline:2px solid #f0c48a;border-color:var(--accent)}
@@ -62,7 +92,6 @@ input:focus,select:focus{outline:2px solid #f0c48a;border-color:var(--accent)}
 .food .p{font-size:10.5px;color:var(--muted);margin-top:2px}
 .food.off{opacity:.32;pointer-events:none;filter:grayscale(1)}
 .flag{font-size:9px;font-weight:700;color:#9a5a12;background:#fbe6cd;border-radius:6px;padding:1px 4px}
-.flag.edited{color:#2f7d62;background:#e3f3ec}
 .food .flag{position:absolute;top:3px;left:4px}
 .qadd{position:absolute;top:2px;right:3px;width:22px;height:22px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--accent2);font-size:15px;line-height:1;cursor:pointer;padding:0;font-weight:700}
 .qadd:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
@@ -104,10 +133,6 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--line)}
 .xdel{border:0;background:none;color:var(--warn);cursor:pointer;font-size:15px;padding:0 4px}
 .del{background:none;border:1px solid var(--line);color:var(--warn);border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap}
 .del:hover{background:#fbeceb;border-color:var(--warn)}
-.foodedit{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;text-align:left;border-bottom:1px dashed #b9b09f;transition:.12s}
-.foodedit:hover{color:var(--accent);border-bottom-color:var(--accent)}
-.foodedit::after{content:" ✎";font-size:11px;color:var(--muted);opacity:.75}
-.foodedit:hover::after{color:var(--accent);opacity:1}
 .empty{color:var(--muted);font-size:13.5px;padding:14px;border:1px dashed var(--line);border-radius:10px;text-align:center}
 .pufabox{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fffdf9;margin-top:12px}
 .pufatrack{height:14px;background:#efe9dd;border-radius:8px;overflow:hidden;margin:8px 0 5px}
@@ -154,50 +179,24 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 .modal li{margin-bottom:5px}
 .modal .mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 .mstats{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-bottom:14px}
-.editgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-.editbox{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fffdf9;font-size:12.5px;margin-bottom:12px}
-.slotdet summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:14.5px;font-weight:700;color:var(--ink)}
-.slotdet summary::-webkit-details-marker{display:none}
-.slotdet summary::after{content:"▸";font-size:13px;color:var(--muted);transition:transform .15s}
-.slotdet[open] summary::after{transform:rotate(90deg)}
-.slotdet .cap{margin-top:3px}
-.slotdet[open] .cap{margin-bottom:10px}
-.slotdet:not([open]) .cap{margin-bottom:0}
-.r3prog{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}
-.r3head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.r3head h3{margin:0;font-size:14.5px}
-.avgbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fffdf9;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px}
-.microgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-@media(max-width:980px){.microgrid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:620px){.microgrid{grid-template-columns:repeat(2,1fr)}}
-.mic{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
-.mic .mh{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;font-weight:700}
-.mic .mv{font-size:12.5px;font-weight:700;margin-top:2px}
-.mic .ms{font-size:10.5px;color:var(--muted)}
-.mic .mbar{height:5px;border-radius:4px;background:#efe9dd;overflow:hidden;margin-top:5px}
-.mic .mbar i{display:block;height:100%;background:var(--accent2);transition:.2s}
-.mic .mbar.low i{background:var(--accent)}
-.mic .mbar.high i{background:var(--warn)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<!-- NOTE: Always update the version label and date below (#appVersion) whenever making changes to this HTML file. -->
+<!-- NOTE: Update version string and date whenever making changes to this file. -->
 <header class="top">
 <svg width="34" height="34" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#f6d3ab"/><path d="M20 6a14 14 0 0 1 0 28z" fill="#d98324"/><circle cx="20" cy="20" r="4.5" fill="#fffdf9"/></svg>
 <div><h1>Peat-Style Daily Planner</h1>
-<div class="sub">Meal library · custom foods · drinks builder · editable portions &amp; macros · daily progress · save your day</div></div>
-<div class="verbadge" id="appVersion" title="Update this version and date whenever modifying the file">
-<strong>v1.6 · 2026-11-27</strong>
-<span>Updated Nov 27, 2026</span>
-</div>
+<div class="sub">Meal library · custom foods · drinks builder · editable portions · daily progress · save your day</div></div>
+<div class="verbadge" aria-label="Version and last updated date"><strong>v2.1</strong><span>Updated 2026-11-27</span></div>
 </header>
 
-<!-- ROW 1 -->
+<!-- ROW 1 (Body metrics, lifestyle & goal) -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 1</span><h2>Body metrics</h2><span class="hint">Metric only — centimetres &amp; kilograms</span></div>
-<div class="grid g5">
+<details class="rowdet" id="row1Det" open>
+<summary class="rowhead"><span class="step">1. Body metrics, lifestyle &amp; goal <span class="arr">▸</span></span><span class="hint">Metric only (cm &amp; kg) · activity &amp; goal</span></summary>
+<div class="grid g5" style="margin-bottom:14px">
 <div><label class="f" for="age">Age (years)</label><input id="age" type="number" min="14" max="100" step="1" placeholder="e.g. 34"></div>
 <div><label class="f" for="gender">Gender</label><select id="gender"><option value="">Select…</option><option value="male">Male</option><option value="female">Female</option></select></div>
 <div><label class="f" for="height">Height (cm)</label><input id="height" type="number" min="120" max="230" step="0.5" placeholder="e.g. 175"></div>
@@ -210,11 +209,6 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <span class="chip" data-x="caffeine">Caffeine</span>
 </div></div>
 </div>
-</section>
-
-<!-- ROW 2 -->
-<section class="row">
-<div class="rowhead"><span class="step">ROW 2</span><h2>Lifestyle &amp; goal</h2><span class="hint">Activity multiplies your resting metabolic rate</span></div>
 <div class="grid g3">
 <div style="grid-column:span 2"><label class="f">Lifestyle / activity level</label>
 <div class="seg" id="act">
@@ -226,13 +220,15 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <div class="seg" id="goal"><button data-g="loss">Fat loss</button><button data-g="maintain">Maintain</button><button data-g="gain">Gain</button></div>
 <div class="hint" style="margin-top:6px">Fat loss −15% (gentle) · Gain +12%.</div></div>
 </div>
+</details>
 </section>
 
-<!-- ROW 3 -->
+<!-- ROW 2 (Targets, daily progress & micronutrients) -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 3</span><h2>Recommended daily calories &amp; macros</h2><span class="pill">Mifflin–St Jeor × activity</span>
-<button class="btn green sm" id="newDayBtn" style="margin-left:auto" title="Archive today's totals into your 30-day trailing history and clear Row 7">Start a new day</button>
-</div>
+<details class="rowdet" id="row2Det" open>
+<summary class="rowhead"><span class="step">2. Recommended daily calories &amp; macros <span class="arr">▸</span></span><span class="pill">Mifflin–St Jeor × activity</span>
+<button type="button" class="btn green sm" id="newDayBtn" style="margin-left:auto" title="Archive today's totals into your 30-day trailing history and clear Section 6">Start a new day</button>
+</summary>
 <div id="calcLock" class="locked">
 <div class="macro">
 <div class="mcard"><div class="k">Daily energy</div><div class="v" id="kcal">—</div><div class="s" id="kcalsub">kcal / day</div></div>
@@ -277,21 +273,25 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 
 <div class="note" style="margin-top:10px">Peat emphasis: carbohydrate-led energy, protein spread across meals with gelatin/collagen balancing muscle-meat amino acids, fat kept low and saturated. Nuts, seeds, seed oils and fish oils are excluded. Items marked <span class="flag">MOD</span> are moderate-PUFA or Peat-cautionary — counted strictly and never auto-picked.</div>
 </div>
-<div class="empty" id="calcMsg">Complete rows 1 and 2 to calculate your targets.</div>
+<div class="empty" id="calcMsg">Complete Section 1 to calculate your targets.</div>
+</details>
 </section>
 
-<!-- ROW 4 : FOOD LIBRARY (meal plans) -->
+<!-- ROW 3 : FOOD LIBRARY (meal plans) -->
 <section class="row">
-<div class="rowhead"><span class="step green">ROW 4</span><h2>Food Library</h2>
-<span class="hint">Ready-made meals — mix and match freely · press <strong>+</strong> to send one to today's entries</span></div>
+<details class="rowdet" id="row3Det" open>
+<summary class="rowhead"><span class="step green">3. Food Library <span class="arr">▸</span></span>
+<span class="hint">Ready-made meals — mix and match freely · press <strong>+</strong> to send one to today's entries</span></summary>
 <div class="grid g4" id="mealLibrary"></div>
-<div class="note" style="margin-top:12px">Portions use <strong>net edible weight</strong> (peeled/trimmed fruit &amp; veg, raw meat/fish weights before cooking). High-PUFA items were reduced and calories made up with low-PUFA foods. Every card shows the computed kcal and the original plan figure; adjust grams or click any food name in row 7 after adding.</div>
+<div class="note" style="margin-top:12px">Portions use <strong>net edible weight</strong> (peeled/trimmed fruit &amp; veg, raw meat/fish weights before cooking). High-PUFA items were reduced and calories made up with low-PUFA foods. Every card shows the computed kcal and the original plan figure; adjust grams or click any food name in Section 6 after adding.</div>
+</details>
 </section>
 
-<!-- ROW 5 : CUSTOM FOOD LIBRARY -->
+<!-- ROW 4 : CUSTOM FOOD LIBRARY -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 5</span><h2>Custom Food Library</h2>
-<span class="hint">Tap a card to select · tap <strong>+</strong> to add that food on its own · drinks live in row 6</span></div>
+<details class="rowdet" id="row4Det" open>
+<summary class="rowhead"><span class="step">4. Custom Food Library <span class="arr">▸</span></span>
+<span class="hint">Tap a card to select · tap <strong>+</strong> to add that food on its own · drinks live in Section 5</span></summary>
 <div class="grid g3" id="library"></div>
 <div class="actions">
 <button class="btn green" id="addSel" disabled>Add Selected</button>
@@ -302,12 +302,14 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 </div>
 <div class="hint" id="slotHint" style="margin-top:8px"></div>
 <div class="alert" id="genWarn" style="display:none"></div>
+</details>
 </section>
 
-<!-- ROW 6 : DRINKS -->
+<!-- ROW 5 : DRINKS -->
 <section class="row">
-<div class="rowhead"><span class="step teal">ROW 6</span><h2>Drinks &amp; smoothie builder</h2>
-<span class="hint">Pick any drink as the base, then dial in the add-ins · <strong>+</strong> adds a drink plain</span></div>
+<details class="rowdet" id="row5Det" open>
+<summary class="rowhead"><span class="step teal">5. Drinks &amp; smoothie builder <span class="arr">▸</span></span>
+<span class="hint">Pick any drink as the base, then dial in the add-ins · <strong>+</strong> adds a drink plain</span></summary>
 <div class="drinkbar">
 <h3>Drinks / smoothies</h3>
 <div class="cap hint">Juices, milks and coffee varieties. Tap to select for the generator, or <strong>+</strong> to log one on its own.</div>
@@ -350,24 +352,28 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <button class="btn teal sm" id="addDrink">Add this drink to today</button>
 <span class="hint">Coconut oil blends into milk drinks; it will not emulsify into black coffee or juice.</span>
 </div>
+</details>
 </section>
 
-<!-- ROW 7 -->
+<!-- ROW 6 : TODAY'S ENTRIES -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 7</span><h2>Today's entries &amp; daily progress</h2><span class="hint">Use − / + or type to edit net portions · click any food name to customize its protein or fat %</span></div>
+<details class="rowdet" id="row6Det" open>
+<summary class="rowhead"><span class="step">6. Today's entries &amp; daily progress <span class="arr">▸</span></span><span class="hint">Use − / + or type to edit net portions · click any food name to customize its protein or fat %</span></summary>
 <div class="macro" style="margin-bottom:14px">
 <div class="mcard"><div class="k">Consumed / target</div><div class="v" id="totK">0</div><div class="s" id="totKs">kcal</div><div class="bar"><i id="barK" style="width:0%;background:var(--accent)"></i></div></div>
 <div class="mcard"><div class="k" style="color:var(--carb)">Carbs</div><div class="v" id="totC">0</div><div class="s" id="totCs">g</div><div class="bar"><i id="barC" style="width:0%;background:var(--carb)"></i></div></div>
 <div class="mcard"><div class="k" style="color:var(--prot)">Protein</div><div class="v" id="totP">0</div><div class="s" id="totPs">g</div><div class="bar"><i id="barP" style="width:0%;background:var(--prot)"></i></div></div>
 <div class="mcard"><div class="k" style="color:var(--fat)">Fat</div><div class="v" id="totF">0</div><div class="s" id="totFs">g</div><div class="bar"><i id="barF" style="width:0%;background:var(--fat)"></i></div></div>
 </div>
-<div id="recipes"><div class="empty">Nothing yet. Add a meal from row 4, press <strong>+</strong> on any food, or build a drink.</div></div>
+<div id="recipes"><div class="empty">Nothing yet. Add a meal from Section 3, press <strong>+</strong> on any food, or build a drink.</div></div>
 <div class="actions"><button class="btn ghost sm" id="clearAll">Delete all entries</button><span class="hint" id="remain"></span></div>
+</details>
 </section>
 
-<!-- ROW 8 : SAVE -->
+<!-- ROW 7 : SAVE (collapsed by default) -->
 <section class="row">
-<div class="rowhead"><span class="step">ROW 8</span><h2>Save &amp; restore your day</h2><span class="hint">Stored in this browser · export a file to keep or share it</span></div>
+<details class="rowdet" id="row7Det">
+<summary class="rowhead"><span class="step">7. Save &amp; restore your day <span class="arr">▸</span></span><span class="hint">Stored in this browser · export a file to keep or share it</span></summary>
 <div class="actions" style="margin-top:0">
 <input type="text" id="planName" placeholder="Plan name, e.g. Tuesday maintenance" style="max-width:280px">
 <button class="btn green sm" id="savePlan">Save plan</button>
@@ -377,6 +383,7 @@ details summary{cursor:pointer;font-size:13px;color:var(--muted)}
 <span class="hint" id="saveState"></span>
 </div>
 <div class="savedlist" id="savedList"></div>
+</details>
 </section>
 
 <footer>
@@ -1117,7 +1124,7 @@ const its=drinkItems(S.sm);
 if(!its.length){toast('No ingredients available — check exclusions.');return;}
 const w=assessEntry(its);
 const commit=()=>{pushRecipe(its,'drink');promoteItems(its.map(x=>x.f.id));toast('Drink added.');};
-if(w.length)askConfirm('Add this drink?','Built from your row 6 settings.',w,statLine(its),commit);
+if(w.length)askConfirm('Add this drink?','Built from your Row 5 settings.',w,statLine(its),commit);
 else commit();};
 
 /* ---------- naming & push ---------- */
@@ -1292,10 +1299,10 @@ if(has(f.id)&&!['oj','pomj','grapej','applej'].includes(f.id))
 steps.push('Serve '+g(f.id)+' g '+f.n.toLowerCase()+(f.id==='promilk'?' ('+round(g(f.id)*0.05,1)+' g protein)':'')+'.');});
 return steps.length?steps:['Weigh out the ingredients and serve.'];}
 
-/* ---------- ROW 7 + editing ---------- */
+/* ---------- ROW 6 + editing ---------- */
 function renderRecipes(){
 const box=$('recipes');
-if(!S.recipes.length){box.innerHTML='<div class="empty">Nothing yet. Add a meal from row 4, press <strong>+</strong> on any food, or build a drink.</div>';return;}
+if(!S.recipes.length){box.innerHTML='<div class="empty">Nothing yet. Add a meal from Row 3, press <strong>+</strong> on any food, or build a drink.</div>';return;}
 box.innerHTML=S.recipes.map((r,i)=>{
 const rows=r.items.map((it,j)=>{
 const isEgg=it.f.unit==='egg',val=isEgg?it.n:it.g,st=isEgg?1:(it.f.step||5);
@@ -1390,7 +1397,9 @@ S.recipes=[];
 renderRecipes();
 update();
 toast(hasEntries?'New day started — previous intake logged to 30-day average.':'New day started — Row 7 is ready.');}
-$('newDayBtn').onclick=()=>{
+$('newDayBtn').onclick=e=>{
+e.preventDefault();
+e.stopPropagation();
 const today=todayKey();
 const t=usedTotals();
 const alreadyToday=S.lastResetDate===today;
@@ -1398,14 +1407,14 @@ if(alreadyToday){
 const warnings=[
 'You already pressed <strong>Start a new day</strong> earlier today ('+today+').',
 S.recipes.length
-?'Logging another reset today will record an additional entry ('+round(t.kcal)+' kcal) into your trailing 30-day average and clear Row 7.'
-:'Row 7 is currently empty — resetting again will clear your current day without adding new calories.'
+?'Logging another reset today will record an additional entry ('+round(t.kcal)+' kcal) into your trailing 30-day average and clear Row 6.'
+:'Row 6 is currently empty — resetting again will clear your current day without adding new calories.'
 ];
 askConfirm(
 'Start another new day today?',
 'Second reset detected on the same calendar date.',
 warnings,
-S.recipes.length?['Current Row 7: '+round(t.kcal)+' kcal','30-day logged days: '+S.history.length]:['Row 7 is empty'],
+S.recipes.length?['Current Row 6: '+round(t.kcal)+' kcal','30-day logged days: '+S.history.length]:['Row 6 is empty'],
 executeNewDay
 );
 }else{
@@ -1537,9 +1546,9 @@ const missing=[];
 if(!S.age)missing.push('age');if(!S.gender)missing.push('gender');
 if(!S.height)missing.push('height');if(!S.weight)missing.push('weight');
 if(!S.act)missing.push('activity');if(!S.goal)missing.push('goal');
-$('calcMsg').textContent='Still needed: '+missing.join(', ')+'.';
+$('calcMsg').textContent='Still needed in Row 1: '+missing.join(', ')+'.';
 ['kcal','cg','pg','fg'].forEach(id=>$(id).textContent='—');
-$('split').innerHTML='';$('pufalimit').textContent=' — targets appear once rows 1 and 2 are complete; you can still add meals.';
+$('split').innerHTML='';$('pufalimit').textContent=' — targets appear once Row 1 is complete; you can still add meals.';
 }else{
 $('kcal').textContent=T.kcal;
 const floorNote=T.floorHit?(' · '+T.minFloor+' kcal floor applied'):'';
@@ -1583,14 +1592,14 @@ $('totKs').textContent='kcal (no target yet)';
 
 $('r3TotK').textContent=round(t.kcal);$('r3TotC').textContent=round(t.c,1);
 $('r3TotP').textContent=round(t.p,1);$('r3TotF').textContent=round(t.f,1);
-['r3BarK','r3BarC','r3BarP','r3BarF'].forEach(id=>$(id).style.width='0%');
+$('r3BarK').style.width='0%';$('r3BarC').style.width='0%';$('r3BarP').style.width='0%';$('r3BarF').style.width='0%';
 $('r3TotKs').textContent='kcal (no target yet)';
 
 $('pufatrack').firstElementChild.style.width='0%';
-$('pufastatus').innerHTML='PUFA so far: <strong>'+round(t.pufa,2)+' g</strong> — set rows 1 and 2 for a ceiling.';
+$('pufastatus').innerHTML='PUFA so far: <strong>'+round(t.pufa,2)+' g</strong> — complete Row 1 for a ceiling.';
 $('remain').textContent='';}
 
-/* Render Row 3 Micronutrients Grid */
+/* Render Row 2 Micronutrients Grid */
 const isFem=S.gender==='female';
 $('microGrid').innerHTML=MICRO_DEFS.map(m=>{
 const rda=(isFem&&m.rdaF)?m.rdaF:m.rda;
@@ -1609,6 +1618,7 @@ autosave();}
 function renderAll(){renderMeals();renderLibrary();renderDrinks();fillBuilder();renderRecipes();update();}
 
 /* ---------- boot ---------- */
+try{
 renderAll();renderSaved();
 (function(){
 let restored=false;
@@ -1623,8 +1633,20 @@ const c=JSON.parse(getCookie(COOKIE_KEY)||'null');
 if(c&&restore(c))$('saveState').textContent='Restored preferences from cookie.';
 }catch(e){}
 }
+if(S.age&&S.gender&&S.height&&S.weight){
+const r1=$('row1Det');if(r1)r1.open=false;
+}
 })();
 setInterval(refreshSelCount,60000);
+}catch(err){
+const wrap=document.querySelector('.wrap');
+if(wrap){
+const box=document.createElement('div');
+box.className='alert';
+box.textContent='Startup error: '+(err&&err.message?err.message:String(err));
+wrap.prepend(box);
+}
+}
 </script>
 </body>
 </html>
